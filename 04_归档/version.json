@@ -1,11 +1,10 @@
 {
   "version": "1.3.2",
   "date": "2026-11-14",
-  "notes": "（首次发版请用 publish.py --notes \"本次更新说明\" 覆盖）",
+  "notes": "（在此写本次更新说明，会显示在用户的更新提示里）",
   "urls": [
     "https://github.com/<owner>/<repo>/releases/download/v1.3.2/PTW_v1.3.2_win64.zip"
   ],
-  "sha256": "c0b671b9602dcafa81d503e5f8a51d15d64448cbf5266289cd2f0d27cfccd2de",
-  "size": 36460880,
-  "page_url": "https://github.com/owner/repo/releases/latest"
+  "sha256": "a65dd66880ce966141babe93d2b372b3e6500f7462742f5592eaa55043a4611c",
+  "size": 36459256
 }
