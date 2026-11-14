@@ -156,20 +156,45 @@ async function checkUpdate() {
   document.getElementById('upNow').onclick = async () => {
     const btn = document.getElementById('upNow');
     btn.disabled = true; btn.textContent = '下载中…';
+    const body = document.getElementById('modalBody');
     try {
       const a = await apiPost('/api/update/apply', {});
       if (!a.ok) { toast(a.error || '更新失败', 'err'); btn.disabled = false; btn.textContent = '立即更新'; return; }
-      document.getElementById('modalBody').innerHTML =
-        '<div style="padding:8px 0">正在替换程序并重启，窗口会自动关闭…</div>';
       document.getElementById('modalFoot').innerHTML = '';
-      // 主进程会自行退出；再轮询本机是否恢复，恢复后刷新页面
+      // 后台在下载，前端只负责显示进度（下载可能要几分钟，不能靠一个长连接死等）
       const t0 = Date.now();
       const tick = async () => {
-        if (Date.now() - t0 > 120000) return;
-        try { await apiGet('/api/modules'); location.reload(); return; } catch (e) { /* 还没起来 */ }
-        setTimeout(tick, 1500);
+        if (Date.now() - t0 > 30 * 60000) return;
+        let p = {};
+        try { p = await apiGet('/api/update/progress'); } catch (e) { /* 重启瞬间会失败 */ }
+        const ph = p.phase || '';
+        if (ph === 'failed') {
+          body.innerHTML = '<div style="color:var(--danger)">更新失败：'
+            + esc(p.error || '未知原因') + '</div><div class="muted" style="margin-top:6px">'
+            + '可以稍后重试；当前版本仍可正常使用。</div>';
+          btn.disabled = false; btn.textContent = '立即更新';
+          return;
+        }
+        if (ph === 'restarting') {
+          body.innerHTML = `<div style="padding:8px 0">正在替换程序并重启（${esc(p.version || '')}），窗口会自动关闭…</div>`;
+          setTimeout(waitBack, 3000);
+          return;
+        }
+        const total = p.total || 0, got = p.got || 0;
+        const pct = total ? Math.min(99, Math.round(got * 100 / total)) : 0;
+        body.innerHTML = `<div style="padding:4px 0">正在下载 ${esc(p.version || '')}　${total ? pct + '%' : ''}</div>
+          <div style="height:6px;background:var(--bg2,#e8eef6);border-radius:4px;overflow:hidden;margin-top:8px">
+            <div style="height:100%;width:${pct}%;background:var(--ok,#2e9e5b);transition:width .3s"></div></div>
+          <div class="muted" style="margin-top:8px;font-size:12px">${total
+            ? (got / 1048576).toFixed(1) + ' / ' + (total / 1048576).toFixed(1) + ' MB'
+            : esc(p.note || '')}</div>`;
+        setTimeout(tick, 800);
       };
-      setTimeout(tick, 4000);
+      const waitBack = async () => {
+        try { await apiGet('/api/modules'); location.reload(); return; } catch (e) { /* 还没起来 */ }
+        setTimeout(waitBack, 1500);
+      };
+      setTimeout(tick, 600);
     } catch (e) {
       toast('更新失败：' + e.message, 'err');
       btn.disabled = false; btn.textContent = '立即更新';

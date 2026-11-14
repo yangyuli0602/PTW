@@ -219,31 +219,67 @@ def _api_update_check(ctx, q):
                          "attempts": e.attempts})
 
 
-def _api_update_apply(ctx, u, body):
-    """下载 → 校验 → 解压 → 交给 launcher 替换 → 本进程退出。"""
+#: 更新任务的进度状态。下载 35MB 在慢网上要几分钟，绝不能同步阻塞请求
+#: （API 是串行加锁的，一旦阻塞，整个界面都会卡死）。
+UPDS = {"phase": "idle", "got": 0, "total": 0, "version": "", "error": "", "note": ""}
+_UPDS_LOCK = threading.Lock()
+UPD_BUSY = ("checking", "downloading", "staging", "restarting")
+
+
+def _api_update_progress(ctx, q):
+    return ctx.json(dict(UPDS))
+
+
+def _do_update():
     from core import updater
     try:
         info, _ = updater.check()
         if not info.get("is_new"):
-            return ctx.json({"ok": False, "error": "当前已是最新版本（%s）" % VERSION})
-        stage, zp = updater.prepare(info)
+            UPDS.update({"phase": "idle", "error": "",
+                         "note": "当前已是最新版本（%s）" % VERSION})
+            return
+        UPDS.update({"phase": "downloading", "version": info["version"],
+                     "got": 0, "total": info.get("size") or 0, "note": ""})
+
+        def prog(got, total):
+            UPDS["got"] = got
+            if total:
+                UPDS["total"] = total
+
+        stage, zp = updater.prepare(info, prog)
+        UPDS.update({"phase": "staging",
+                     "note": "已下载，正在解压到 %s" % os.path.basename(stage)})
         logutil.info("更新已下载并解压到 %s（%s → %s）"
                      % (stage, VERSION, info["version"]), "update")
+        UPDS.update({"phase": "restarting", "version": info["version"],
+                     "note": "正在替换程序并重启"})
         mode = updater.launch_apply()
         # launcher 正在等我退出：立刻退；否则是刚拉起的 launcher，给它 3 秒启动
         delay = 0.3 if mode == "launcher-waiting" else 3.0
         threading.Timer(delay, lambda: os._exit(0)).start()
-        return ctx.json({"ok": True, "version": info["version"], "mode": mode,
-                         "note": "正在替换程序并重启，请稍候…"})
     except updater.UpdateError as e:
-        return ctx.json({"ok": False, "error": e.msg, "attempts": e.attempts}, 400)
+        UPDS.update({"phase": "failed", "error": e.msg})
+        logutil.write("ERROR", "更新失败：%s" % e.msg, "update")
     except Exception as e:
+        UPDS.update({"phase": "failed", "error": str(e)[:200]})
         logutil.write("ERROR", "更新失败：%s\n%s" % (e, traceback.format_exc()), "update")
-        return ctx.json({"ok": False, "error": str(e)}, 400)
+
+
+def _api_update_apply(ctx, u, body):
+    """立刻返回，后台线程干活；前端轮询 /api/update/progress 看进度。"""
+    with _UPDS_LOCK:
+        if UPDS.get("phase") in UPD_BUSY:
+            return ctx.json({"ok": True, "phase": UPDS["phase"],
+                             "note": "正在更新，请勿关闭窗口"})
+        UPDS.update({"phase": "checking", "got": 0, "total": 0,
+                     "version": "", "error": "", "note": "检查新版本…"})
+    threading.Thread(target=_do_update, daemon=True).start()
+    return ctx.json({"ok": True, "phase": "checking", "note": "开始更新"})
 
 
 GET_ROUTES.setdefault("/api/update/check", _api_update_check)
 POST_ROUTES.setdefault("/api/update/apply", _api_update_apply)
+GET_ROUTES.setdefault("/api/update/progress", _api_update_progress)
 
 
 
