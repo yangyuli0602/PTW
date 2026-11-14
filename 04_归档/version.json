@@ -1,10 +1,12 @@
 {
   "version": "1.3.2",
   "date": "2026-11-14",
-  "notes": "（在此写本次更新说明，会显示在用户的更新提示里）",
+  "notes": "1. 界面改为独立窗口（Edge app 模式，无地址栏、任务栏独立）\n2. 新增顶部「退出」按钮，优雅停机并落盘\n3. 自动更新：点「立即更新」自动下载-校验-替换-重启，不再多开窗口\n4. 漏洞修复：更新后旧窗口自动重连",
   "urls": [
-    "https://github.com/<owner>/<repo>/releases/download/v1.3.2/PTW_v1.3.2_win64.zip"
+    "https://api.github.com/repos/yangyuli0602/PTW/releases/assets/746169466",
+    "https://github.com/yangyuli0602/PTW/releases/download/v1.3.2/PTW_v1.3.2_win64.zip"
   ],
   "sha256": "a65dd66880ce966141babe93d2b372b3e6500f7462742f5592eaa55043a4611c",
-  "size": 36459256
+  "size": 36459256,
+  "page_url": "https://github.com/yangyuli0602/PTW/releases/latest"
 }

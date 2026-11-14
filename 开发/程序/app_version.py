@@ -7,7 +7,7 @@ UPDATE_REPO 形如 "yourname/PTW"——填了才会去检查更新；留空则�
 import os
 
 #: 当前版本（发布时改这里，然后打包 → 建 Release → 最后改仓库 version.json）
-APP_VERSION = "1.3.2"
+APP_VERSION = "1.3.3"
 
 #: GitHub 仓库（owner/repo）。留空 = 不检查更新（开发版）
 UPDATE_REPO = "yangyuli0602/PTW"
