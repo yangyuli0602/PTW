@@ -1,8 +1,9 @@
 {
   "version": "1.3.5",
   "date": "2026-11-14",
-  "notes": "回滚：更新清单撤回到 v1.3.5",
+  "notes": "1. 浏览器缓存治理：缓存单独放 data/ui_cache，限制 50MB，关闭组件更新（原来每个用户白占约 500MB）\n2. 文档重组：一个调度入口 + skills/平台运行·底稿·开发·测试·打包发版\n3. 新增统一回归入口 regress.py（13 个脚本 10 秒跑完）\n4. 打包后自动冒烟：版本/板块/首页/模板四项校验\n5. 禁止同版本号用不同字节重复发布\n6. 新增发布历史记录（04_归档/已发布.json）与 publish.py rollback",
   "urls": [
+    "https://api.github.com/repos/yangyuli0602/PTW/releases/assets/746756938",
     "https://github.com/yangyuli0602/PTW/releases/download/v1.3.5/PTW_v1.3.5_win64.zip"
   ],
   "sha256": "00d26546e574c965cd8e6aec89de7d564d2e10c6b65df8e4b55d142bff398e1a",
