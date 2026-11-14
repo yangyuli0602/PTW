@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>WP 初稿生成 · PTW平台</title>
+<link rel="stylesheet" href="assets/bkd.css"/>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">
+    <div class="mark">WP</div>
+    <div class="brand-txt">
+      <h1>WP 初稿生成</h1>
+      <p>工具做机械活（本年上数、抽样），AI 做判断活（上年数、异常波动分析）</p>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn ghost" id="btnReset">重置本页</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="tabs" id="mainTabs" style="margin-bottom:14px">
+    <button class="tab active" data-mpane="wp_cash">货币资金</button>
+    <button class="tab" data-mpane="wp_exp">销管费用</button>
+    <button class="tab" data-mpane="wp_fa">长期资产</button>
+  </div>
+
+  <!-- ============================================ 货币资金 ============================================ -->
+  <div id="mpane-wp_cash">
+
+    <div class="flow" id="flowCash">
+      <div class="fl" data-f="1"><i>1</i><span>读取余额表</span></div>
+      <div class="fl" data-f="2"><i>2</i><span>模板与上年</span></div>
+      <div class="fl" data-f="3"><i>3</i><span>关键信息</span></div>
+      <div class="fl" data-f="4"><i>4</i><span>一键生成</span></div>
+    </div>
+
+    <!-- ① 读取科目余额表 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">1</span>
+        <h2>读取科目余额表</h2>
+        <span class="hint">自动从 PTW 平台取清洗后的 tb，看前 10 行确认取对账套</span>
+        <button class="btn" id="btnReloadTb" style="margin-left:auto">重新读取</button>
+      </div>
+      <div id="tbStatus" class="status"></div>
+      <div id="tbSummary" class="tb-summary"></div>
+      <div class="scroll" id="tbTable"></div>
+      <div class="hint mt">
+        取的是<b>货币资金</b>三个一级科目（库存现金 / 银行存款 / 其他货币资金）。
+        零余额账户照样进底稿，不按非零过滤；一个都没有说明 tb 还没合并或一级科目没识别出来。
+      </div>
+    </div>
+
+    <!-- ② 模板与上年资料 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">2</span>
+        <h2>模板与上年资料</h2>
+        <span class="hint">底稿模板决定格式；上年底稿决定上年数能不能回捞</span>
+      </div>
+
+      <div class="subblock">
+        <div class="subhd">底稿模板 <span class="tag-on" id="tplTag">已就绪</span></div>
+        <div class="rowgrid">
+          <label>当前模板<input type="text" id="tplName" readonly placeholder="未加载"/></label>
+          <button class="btn" id="btnTplDownload">下载当前模板</button>
+          <button class="btn" id="btnTplUpload">上传替换</button>
+          <input type="file" id="tplFile" accept=".xlsx,.xlsm" hidden/>
+        </div>
+        <div id="tplStatus" class="status"></div>
+        <div class="hint" id="tplNote">
+          生成时严格以该模板为底：保留全部工作表，填 C.00 BKD 明细、给 C.00 Lead 打链接公式，并追加检查表。
+        </div>
+      </div>
+
+      <div class="subblock">
+        <div class="subhd">上年底稿 <span class="tag-off" id="priorTag">可选</span></div>
+        <div class="dz" id="dz-prior">
+          <div class="dz-title">点击选择，或拖拽文件到此处</div>
+          <div class="dz-desc">支持 .xlsx / .xlsm（上年货币资金 BKD 底稿）</div>
+          <div class="dz-file">尚未上传</div>
+        </div>
+        <div id="priorPane" class="mt"></div>
+        <div class="mt">
+          <button class="btn ghost-dark" id="btnPriorProbe">导出结构探测包</button>
+          <span class="hint">认不出 BKD 明细表时，把探测结果交给 AI 认列位再贴回来</span>
+        </div>
+        <div id="priorAiBox" class="mt" hidden></div>
+        <div class="hint mt">
+          <b>不上传也能生成</b>：只写本年数，上年数与变动分析留空标黄，后面人工补。
+          上传后工具能自动回捞上年余额、算出「本年新增 / 上年已有本年无」。
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 关键信息 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">3</span>
+        <h2>基础信息</h2>
+        <span class="hint">全底稿共用，存一份；每份底稿的 Lead 封面都读这里</span>
+      </div>
+      <div class="rowgrid">
+        <label>资产负债表日<input type="date" id="optC00Date"/></label>
+        <label>客户名称<input type="text" id="optC00Customer" placeholder="写进 Lead 封面与表1"/></label>
+      </div>
+      <div class="rowgrid">
+        <label>适用会计准则<input type="text" id="optStandard" placeholder="中国企业会计准则"/></label>
+        <label>记账本位币<input type="text" id="optCurrency" placeholder="人民币"/></label>
+        <label>可容忍误差 TE(元)<input type="number" id="optTE" value="550000" step="0.01"/></label>
+        <label>名义金额 SAD(元)<input type="number" id="optSAD" placeholder="留空按 TE×10%"/></label>
+      </div>
+      <div class="subblock" id="craBlock">
+        <div class="subhd">CRA 认定风险 · 按科目配置
+          <span class="hint">改百分比后，Lead 认定区的阈值公式自动跟随，不用再改公式</span>
+        </div>
+        <div class="rowgrid">
+          <label>底稿类型<select id="craModule"></select></label>
+          <label>Minimal 占 TE(%)<input type="number" id="craPctMinimal" min="0" max="100" step="1"/></label>
+          <label>Low 占 TE(%)<input type="number" id="craPctLow" min="0" max="100" step="1"/></label>
+          <label>Moderate 占 TE(%)<input type="number" id="craPctModerate" min="0" max="100" step="1"/></label>
+          <label>High 占 TE(%)<input type="number" id="craPctHigh" min="0" max="100" step="1"/></label>
+        </div>
+        <div class="rowgrid" id="craAssertRows"></div>
+        <div class="hint">等级选「N/A」时，该项认定的阈值为「-」；等级留空则不写，保留底稿里手选的值。</div>
+      </div>
+      <div class="mt">
+        <button class="btn sm" id="btnSaveBase" type="button">保存为全底稿共用</button>
+        <button class="btn sm" id="btnExportBase" type="button">导出关键信息</button>
+        <button class="btn sm" id="btnImportBase" type="button">导入关键信息</button>
+        <input type="file" id="fileImportBase" accept=".json,application/json" hidden/>
+        <span class="hint" id="baseNote">导出的文件含客户、日期、准则、本位币、TE/SAD 与 CRA 配置，改完可直接导入</span>
+      </div>
+
+      <div id="c00Fx" class="subblock" hidden>
+        <div class="subhd">折算率（按主体）</div>
+        <div class="hint" style="margin-bottom:8px">
+          只有<b>本位币为外币</b>的主体才需要改（港币户 0.9xxxx、美元户 7.xxxx），其余保持 <b>1</b>。
+          生成后 BKD 右侧会多出「折算率」「折算人民币」两列，合计、勾稽、Lead 全按折算人民币口径。
+        </div>
+        <div id="c00FxRows" class="rowgrid"></div>
+      </div>
+
+      <div class="cutoff-box">
+        <div class="cutoff-hd">
+          <label><input type="checkbox" id="optCutoff" checked/> <b>执行截止性测试（C.03 Cutoff）</b></label>
+          <span class="hint">样本取自银行流水（本期未接入，C.03 样本区留空）</span>
+        </div>
+        <div class="rowgrid" id="cutoffOpts">
+          <label>截止期间 <span class="hint">跟随资产负债表日</span><input type="date" id="optCutoffDate" readonly/></label>
+          <label>期末前 N 天<input type="number" id="optCutoffBefore" value="1" min="0" max="60"/></label>
+          <label>期末后 N 天<input type="number" id="optCutoffAfter" value="1" min="0" max="60"/></label>
+          <label>单笔转账测试阈值(元)<input type="number" id="optCutoffAmt" value="100000" min="0"/></label>
+        </div>
+        <div class="hint" id="cutoffNote">
+          规则：截止性测试的样本取自<b>银行流水</b>（对账单口径的收付款双方、账号与到账日期），
+          按截止期间与单笔金额阈值筛选；<b>不从序时账推导</b>——序时账只有科目与金额，凑出来的配对不算证据。
+          本期平台尚未接入流水，样本区先留空，表内 B11 已写明缺口。
+        </div>
+        <div class="mt">
+          <button class="btn sm" id="btnProbe" type="button">自检序时账覆盖</button>
+          <span class="hint">看序时账覆盖到哪一天、认出哪些货币资金科目（数据完整性参考，不再用于截止测试取样本）</span>
+        </div>
+        <div id="probeOut" class="mt"></div>
+      </div>
+    </div>
+
+    <!-- ④ 一键生成 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">4</span>
+        <h2>一键生成</h2>
+        <span class="hint">C.00 BKD + Lead + Cutoff + 检查表，一并产出</span>
+      </div>
+
+      <div id="preflight" class="preflight"></div>
+
+      <div class="mt" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn primary lg" id="btnGenAll">一键生成底稿</button>
+        <span class="hint">一键产出 BKD、Lead、Cutoff 与检查表，都在同一份底稿里</span>
+      </div>
+      <div id="genStatus" class="status"></div>
+      <div id="genWarn"></div>
+
+      <div id="genResult" hidden>
+        <div id="c00Tiles" class="tiles"></div>
+        <div id="genFiles" class="mt" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+        <div class="tabs" id="resTabs">
+          <button class="tab active" data-pane="bkd">BKD 预览（前 10 行）</button>
+          <button class="tab" data-pane="gaps">待确认清单</button>
+          <button class="tab" data-pane="cutoff">Cutoff 结果</button>
+        </div>
+        <div id="resPane-bkd" class="mt"></div>
+        <div id="resPane-gaps" class="mt" hidden><div id="c00Gaps"></div></div>
+        <div id="resPane-cutoff" class="mt" hidden><div id="cutoutOut"></div></div>
+      </div>
+    </div>
+
+  </div><!-- /mpane-wp_cash -->
+
+  <!-- ============================================ 销管费用 ============================================ -->
+  <div id="mpane-wp_exp" hidden>
+
+    <div class="flow" id="flowExp">
+      <div class="fl" data-f="1"><i>1</i><span>读取费用发生额</span></div>
+      <div class="fl" data-f="2"><i>2</i><span>模板与资料</span></div>
+      <div class="fl" data-f="3"><i>3</i><span>关键信息</span></div>
+      <div class="fl" data-f="4"><i>4</i><span>一键生成</span></div>
+    </div>
+
+    <!-- ① 读取费用发生额 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">1</span>
+        <h2>读取费用发生额</h2>
+        <span class="hint">从序时账按「账簿 × 科目编码」汇总，先看前 10 行确认口径</span>
+        <button class="btn" id="btnReloadExp" style="margin-left:auto">重新读取</button>
+      </div>
+      <div id="expTbStatus" class="status"></div>
+      <div id="expTbSummary" class="tb-summary"></div>
+      <div class="scroll" id="expTbTable"></div>
+      <div class="hint mt">
+        本期发生额 = 借方 −（贷方 − 结转损益贷方）。月末「结转本期损益」会把费用科目冲平，
+        不剔除的话每个科目都会算成 0；真实红字冲销仍然照扣。
+      </div>
+    </div>
+
+    <!-- ② 模板与资料 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">2</span>
+        <h2>模板与资料</h2>
+        <span class="hint">底稿模板决定格式；账套对照表决定 B 列能不能填公司名</span>
+      </div>
+
+      <div class="subblock">
+        <div class="subhd">底稿模板 <span class="tag-on" id="expTplTag">已就绪</span></div>
+        <div class="rowgrid">
+          <label>当前模板<input type="text" id="expTplName" readonly value="U_exp SWP VC&amp;VD 模板.xlsx"/></label>
+        </div>
+        <div class="hint">
+          含 VC.00 销售费用 BKD 与 VD.00 管理费用 BKD 两张明细表，
+          生成时保留全部工作表并追加「费用检查」表。
+        </div>
+      </div>
+
+      <div class="subblock">
+        <div class="subhd">上一期底稿 <span class="tag-off" id="expPriorTag">可选</span>
+          <span class="hint">一册 WP 就够：上期审定数与上一期 TOD 都从这份文件里认</span>
+        </div>
+        <div class="dz" id="dz-exp-prior">
+          <div class="dz-title">点击选择，或拖拽文件到此处</div>
+          <div class="dz-desc">支持 .xlsx / .xlsm（上年费用 BKD 底稿，TOD 页在同一册里）</div>
+          <div class="dz-file">尚未上传</div>
+        </div>
+        <div id="expPriorPane" class="mt"></div>
+        <div class="hint mt">
+          读的是上年 BKD 的<b>「上期审定数」列</b>，按「账簿 + 科目名称」匹配回本年，账簿名改了会退回按科目名匹配。
+          拖进来后下方选哪张表是销售费用、哪张是管理费用；<b>上传后变动分析才按「金额达阈值 且 变动率达 10%」双条件挑对象</b>。
+          <br/>同一份文件里若有 TOD 页，也在这里选了直接用：<b>整页搬进来（只搬值、保留原格式与颜色）</b>，
+          本期「TOD 预审+剩余期间」的预审段改为链接该页，剩余期间仍按本期序时账算。
+          上期若是「预审+剩余」模板，取的是它的<b>合计列</b>（如 1-3 月 + 4-6 月 = 1-6 月）。
+          两期重要性水平不同，预审段不按本期阈值重算。上期底稿须先用 Excel 打开保存过（要有公式缓存值），否则搬进来是空白页。
+        </div>
+      </div>
+    </div>
+
+    <!-- ③ 关键信息 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">3</span>
+        <h2>关键信息</h2>
+        <span class="hint">期间决定取哪几个月，生成前确认一次</span>
+      </div>
+      <div class="cols2">
+        <!-- 左：基础信息 -->
+        <div class="col">
+          <div class="rowgrid">
+            <label>期间起 <span class="hint">1~12 或 2026-01</span><input type="text" id="optExpFrom" value="1"/></label>
+            <label>期间止<input type="text" id="optExpTo" value="6"/></label>
+            <label>资产负债表日<input type="date" id="optExpDate"/></label>
+            <label>客户名称 <span class="hint">可留空</span><input type="text" id="optExpCustomer" placeholder="填了会写进 Lead"/></label>
+          </div>
+          <div class="rowgrid">
+            <label>可容忍误差 TE <span class="hint">元；写进 Lead C4，波动幅度=TE×50%</span><input type="text" id="optExpTe" value="550000"/></label>
+            <label>名义金额 SAD <span class="hint">元；写进 Lead C5，留空按 TE×10%</span><input type="text" id="optExpSad" placeholder="默认 TE×10%"/></label>
+          </div>
+          <div class="rowgrid">
+            <label>适用会计准则 <span class="hint">写进 Lead C6</span>
+              <select id="optExpStd">
+                <option value="中国企业会计准则">中国企业会计准则</option>
+                <option value="小企业会计准则">小企业会计准则</option>
+                <option value="国际财务报告准则（IFRS）">国际财务报告准则（IFRS）</option>
+                <option value="">（留空，人工填）</option>
+              </select>
+            </label>
+            <label>记账本位币 <span class="hint">写进 Lead C7</span><input type="text" id="optExpCcy" placeholder="人民币 / CNY"/></label>
+            <label>预审截止月 <span class="hint">TOD 按此拆预审/剩余期间；留空＝不分段</span><input type="text" id="optExpPre" placeholder="如 6"/></label>
+          </div>
+        </div>
+
+        <!-- 右：CRA 认定风险 -->
+        <div class="col">
+          <div class="subhd">CRA 认定风险 · 销管费用
+            <span class="hint">改百分比后，两张 BKD 认定区的阈值公式跟着变</span>
+          </div>
+          <div class="rowgrid">
+            <label>Minimal 占 TE(%)<input type="number" id="expCraPctMinimal" min="0" max="100" step="1"/></label>
+            <label>Low 占 TE(%)<input type="number" id="expCraPctLow" min="0" max="100" step="1"/></label>
+          </div>
+          <div class="rowgrid">
+            <label>Moderate 占 TE(%)<input type="number" id="expCraPctModerate" min="0" max="100" step="1"/></label>
+            <label>High 占 TE(%)<input type="number" id="expCraPctHigh" min="0" max="100" step="1"/></label>
+          </div>
+          <div class="rowgrid" id="expCraAssertRows"></div>
+          <div class="hint">等级选「N/A」时该项阈值为「-」；留空则不写，保留底稿里手选的值。</div>
+          <div class="mt">
+            <button class="btn sm" id="btnExpCraSave" type="button">保存 CRA 配置</button>
+            <span class="hint">只存销管费用这一套，不动货币资金</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ④ 一键生成 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">4</span>
+        <h2>一键生成</h2>
+        <span class="hint">VC.00 销售费用 BKD + VD.00 管理费用 BKD + 检查表</span>
+      </div>
+      <div id="expPreflight" class="preflight"></div>
+      <div class="mt" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn primary lg" id="btnExpGen">一键生成底稿</button>
+        <span class="hint">生成前会先跑一次预览，确认口径再落盘</span>
+      </div>
+      <div id="expGenStatus" class="status"></div>
+      <div id="expGenResult" hidden>
+        <div id="expTiles" class="tiles"></div>
+        <div id="expFiles" class="mt" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+        <div class="subhd">待人工确认的格子</div>
+        <div id="expGaps"></div>
+      </div>
+    </div>
+
+  </div><!-- /mpane-wp_exp -->
+
+  <!-- ============================================ 固定资产（SWP 底稿） ============================================ -->
+  <div id="mpane-wp_fa" hidden>
+
+    <div class="flow" id="flowFa">
+      <div class="fl" data-f="1"><i>1</i><span>读取余额表与序时账</span></div>
+      <div class="fl" data-f="2"><i>2</i><span>类别与口径核对</span></div>
+      <div class="fl" data-f="3"><i>3</i><span>关键信息</span></div>
+      <div class="fl" data-f="4"><i>4</i><span>一键生成</span></div>
+    </div>
+
+    <!-- ① 读取 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">1</span>
+        <h2>读取余额表与序时账</h2>
+        <span class="hint">1601 原值 / 1602 累计折旧 / 1603 减值准备</span>
+        <button class="btn" id="btnFaReload" style="margin-left:auto">重新读取</button>
+      </div>
+      <div id="faStatus" class="status"></div>
+      <div id="faTiles" class="tiles"></div>
+      <div class="hint mt">
+        数据直接来自「一、导入与清洗」合并后的科目余额表与序时账，<b>不需要另给资产台账</b>。
+        期初取 TB、变动取序时账，期末 = 期初 + 变动，两边必须勾稽。
+      </div>
+    </div>
+
+    <!-- ② 类别与口径 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">2</span>
+        <h2>类别与口径核对</h2>
+        <span class="hint">表1 有几个类别块、几行变动，由这张表决定</span>
+      </div>
+      <div class="scroll" id="faCats"></div>
+      <div id="faWarn" class="mt"></div>
+      <div class="hint mt">
+        类别取自 TB 与序时账的辅助核算并集。只在一边出现的类别会在这里报警，不会静默并进去 ——
+        分类口径一旦分叉，期末必然对不上，而表面只是「差异若干元」。
+      </div>
+    </div>
+
+    <!-- ③ 关键信息 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">3</span>
+        <h2>关键信息</h2>
+        <span class="hint">资产负债表日决定「本期」是哪一段</span>
+      </div>
+      <div class="rowgrid">
+        <label>资产负债表日<input type="date" id="optFaDate"/></label>
+        <label>客户名称 <span class="hint">可留空</span><input type="text" id="optFaCustomer"/></label>
+      </div>
+    </div>
+
+    <!-- ④ 生成 -->
+    <div class="card">
+      <div class="card-hd">
+        <span class="stepno">4</span>
+        <h2>一键生成</h2>
+        <span class="hint">K.01 + Lead + 三张清单，共 17 张 sheet</span>
+      </div>
+      <div class="mt" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn primary lg" id="btnFaGen">一键生成底稿</button>
+        <span class="hint">TB 核对块与 Lead 互校不平会当场拦下，不会自动调平</span>
+      </div>
+      <div id="faGenStatus" class="status"></div>
+      <div id="faGenResult" hidden>
+        <div id="faGenTiles" class="tiles"></div>
+        <div id="faFiles" class="mt" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+        <div class="subhd">生成留痕</div>
+        <div id="faGaps"></div>
+      </div>
+    </div>
+
+  </div><!-- /mpane-wp_fa -->
+
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<script src="assets/bkd.js"></script>
+<script src="assets/fa.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+# ---------- 测试样本：只留回归脚本，样本数据不进 git（体积大、可重新获取）----------
+/开发/01_测试/*
+!/开发/01_测试/自动回归
+!/开发/01_测试/自动回归/**
+!/开发/01_测试/README.md
+/开发/01_测试/自动回归/**/*.xlsx
+/开发/01_测试/自动回归/**/*.xls
+/开发/01_测试/自动回归/**/*.zip
+/开发/01_测试/自动回归/**/*.duckdb
+
+
+# ---------- 凭证：绝不入库 ----------
+*_token.txt
+*.token
+.env
+
+# ---------- 构建临时目录（含旧 runtime 备份，体积大且可重建）----------
+/runtime_old*/
+/runtime_new*/
+/tmp/_dist_new*/
+
+# ---------- 运行产物：不进 git（程序可重建、数据属于用户）----------
+/runtime/
+/runtime_new/
+/runtime_old/
+/PTW.exe
+/version.json
+/update_pending.json
+/data/
+/tmp/
+/04_归档/*.zip
+/04_归档/*.7z
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ---------- 打包中间物 ----------
+/tmp/buildenv/
+/tmp/pyi-build/
+/开发/构建/build/
+/开发/构建/dist/
+
+# ---------- 编辑/系统 ----------
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+~$*

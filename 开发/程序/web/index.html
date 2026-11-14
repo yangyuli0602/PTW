@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PTW平台 · 离线审计底稿工具</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='25' font-size='26'>📑</text></svg>">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <b>PTW平台</b>
+    <em id="brandSub">PBC to WP · 离线审计底稿工具</em>
+  </div>
+  <div class="top-status" id="topStatus"></div>
+  <div class="top-actions">
+    <span class="muted" id="verTag" style="font-size:12px;margin-right:6px"></span>
+    <button class="btn ghost sm" id="btnLogs">日志</button>
+    <button class="btn ghost sm" id="btnAI">AI 助手</button>
+    <button class="btn ghost sm" id="btnUpdate">检查更新</button>
+    <button class="btn ghost sm" id="btnHelp">使用说明</button>
+    <button class="btn ghost sm" id="btnBackup">备份数据库</button>
+    <button class="btn ghost sm" id="btnQuit">退出</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="nav" id="nav"></nav>
+  <main id="main"></main>
+</div>
+
+<div class="busy" id="busy">
+  <div class="busy-box">
+    <div class="spinner"></div>
+    <div class="busy-msg" id="busyMsg">处理中</div>
+    <div class="busy-sub" id="busySub"></div>
+    <div class="busy-bar" id="busyBar" hidden><div class="busy-fill" id="busyFill"></div></div>
+    <div class="busy-pct" id="busyPct" hidden>0%</div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <b id="modalTitle">标题</b>
+      <button class="x" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<input type="file" id="fileInput" multiple accept=".xlsx,.xlsm,.xls,.csv,.txt,.tsv,.zip" hidden>
+<input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+<input type="file" id="zipInput" accept=".zip" hidden>
+
+<script src="assets/app.js"></script>
+<script src="assets/platform.js"></script>
+</body>
+</html>

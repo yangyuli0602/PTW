@@ -1,0 +1,26 @@
+#!/bin/sh
+# 提交前结构体检（防止乱存文件 / 规则文件膨胀 / 引用工作区外路径）
+# 安装：git config core.hooksPath .githooks   ← 每个新克隆的仓库要执行一次
+# 豁免：git commit --no-verify（请在提交说明里写明原因）
+
+ROOT=$(git rev-parse --show-toplevel)
+
+# 按优先级找 Python：打包环境 → 源码 runtime → 系统
+PY=""
+for c in "$ROOT/tmp/buildenv/Scripts/python.exe" \
+         "$ROOT/开发/程序/runtime/python/python.exe"; do
+    if [ -f "$c" ]; then PY="$c"; break; fi
+done
+
+if [ -n "$PY" ]; then
+    exec "$PY" "$ROOT/.githooks/check_structure.py"
+fi
+
+for c in python python3 py; do
+    if command -v "$c" >/dev/null 2>&1; then
+        exec "$c" "$ROOT/.githooks/check_structure.py"
+    fi
+done
+
+echo "[结构体检] 找不到可用的 Python，跳过检查（请保留 tmp/buildenv 或安装 Python）"
+exit 0

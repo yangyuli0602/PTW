@@ -1,0 +1,205 @@
+:root{
+  --ink:#1c2733; --ink-2:#4a5b6d; --ink-3:#7b8a9b;
+  --line:#e2e8ef; --line-2:#eef2f7;
+  --bg:#f4f7fa; --card:#ffffff;
+  --navy:#12324f; --navy-2:#1e4e79; --accent:#2b77c9; --accent-soft:#eaf2fb;
+  --ok:#2e7d5b; --warn:#b8860b; --danger:#b3434f;
+  --new-bg:#fffaf0; --miss-bg:#fdf3f4;
+  --mono:"Consolas","SFMono-Regular",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font:14px/1.6 "Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans CN",system-ui,-apple-system,sans-serif;
+  color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,p{margin:0}
+button{font-family:inherit}
+.topbar{
+  background:linear-gradient(135deg,#0f2b45 0%,#1b4a72 55%,#22608f 100%);
+  color:#fff; padding:20px 28px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  box-shadow:0 1px 0 rgba(0,0,0,.08);
+}
+.brand{display:flex; align-items:center; gap:14px}
+.mark{
+  width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.22); display:flex;align-items:center;justify-content:center;
+  font-weight:700; letter-spacing:.5px; font-size:13px;
+}
+.brand-txt h1{font-size:19px; font-weight:600; letter-spacing:.3px}
+.brand-txt p{font-size:12px; color:rgba(255,255,255,.66); margin-top:2px}
+.topbar-actions{display:flex; gap:10px}
+.wrap{max-width:1240px; margin:0 auto; padding:22px 28px 60px}
+.card{
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:18px 20px 20px; margin-bottom:16px;
+  box-shadow:0 1px 2px rgba(16,38,60,.04), 0 8px 24px -18px rgba(16,38,60,.25);
+}
+.card-hd{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap}
+.card-hd h2{font-size:15px; font-weight:600}
+.stepno{
+  width:22px;height:22px;border-radius:50%; background:var(--navy-2); color:#fff;
+  font-size:12px; font-weight:600; display:flex;align-items:center;justify-content:center; flex:0 0 auto;
+}
+.hint{font-size:12px; color:var(--ink-3); font-weight:400}
+.mt{margin-top:14px}
+.btn{
+  border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:8px;
+  padding:7px 14px; font-size:13px; cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:6px;
+}
+.btn:hover{border-color:#c3d3e4; background:#f8fbfe}
+.btn.primary{background:var(--navy-2); border-color:var(--navy-2); color:#fff}
+.btn.primary:hover{background:#1a4468}
+.btn.lg{padding:10px 22px; font-size:14px; font-weight:600}
+.btn.ghost{background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.28); color:#fff}
+.btn:disabled{opacity:.5; cursor:not-allowed}
+
+.status{padding:10px 14px; border-radius:8px; font-size:13px; margin-bottom:10px; display:none}
+.status.ok{display:block; background:#eaf6ef; color:var(--ok); border:1px solid #c9e7d5}
+.status.err{display:block; background:#fdf3f4; color:var(--danger); border:1px solid #f2cdd1}
+.status.loading{display:block; background:var(--accent-soft); color:var(--navy-2); border:1px solid #cfe0f3}
+
+.tb-summary{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px}
+.tb-summary .tile{flex:1; min-width:140px; background:#f8fbfe; border:1px solid var(--line-2); border-radius:8px; padding:10px 14px}
+.tb-summary .tile .k{font-size:12px; color:var(--ink-3)}
+.tb-summary .tile .v{font-size:20px; font-weight:600; color:var(--navy)}
+
+.dz{
+  border:2px dashed #cfd9e5; border-radius:10px; padding:22px; text-align:center; cursor:pointer;
+  transition:.15s; background:#fbfcfe;
+}
+.dz:hover{border-color:var(--accent); background:var(--accent-soft)}
+.dz.over{border-color:var(--accent); background:var(--accent-soft)}
+.dz.loaded{border-style:solid; border-color:#b8d8c0; background:#f4faf6}
+.dz-title{font-size:14px; font-weight:600}
+.dz-desc{font-size:12px; color:var(--ink-3); margin-top:2px}
+.dz-file{font-size:12px; color:var(--accent); margin-top:8px}
+
+.rowgrid{display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end}
+.rowgrid label{display:flex; flex-direction:column; gap:4px; font-size:12px; color:var(--ink-2)}
+.rowgrid input[type=text], .rowgrid input[type=number], .rowgrid input[type=date], .rowgrid select{
+  padding:6px 10px; border:1px solid var(--line); border-radius:6px; font-size:13px; width:180px;
+}
+.rowgrid select{width:280px; background:#fff}
+.checkline{display:flex; gap:18px; margin-top:12px; font-size:13px; align-items:center; flex-wrap:wrap}
+.checkline label{display:flex; align-items:center; gap:6px}
+
+/* Cutoff 截止性测试设置区 */
+.cutoff-box{margin-top:16px; padding:12px 14px 14px; border:1px solid var(--line-2);
+  border-radius:8px; background:#fbfcfe}
+.cutoff-box.off{opacity:.55}
+.cutoff-hd{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px; font-size:13px}
+.cutoff-hd label{display:flex; align-items:center; gap:6px; cursor:pointer}
+.cutoff-box .rowgrid label{font-size:12px}
+.cutoff-box .hint{margin-top:8px; line-height:1.75}
+
+.scroll{overflow-x:auto; max-width:100%}
+table{border-collapse:collapse; font-size:12.5px}
+th,td{border:1px solid var(--line-2); padding:5px 8px; text-align:left; white-space:nowrap}
+th{background:#f2f6fb; font-weight:600; color:var(--ink-2)}
+td.num{text-align:right; font-variant-numeric:tabular-nums}
+td.cwrap{white-space:normal; min-width:180px}
+.mono{font-family:var(--mono)}
+
+.sheets-tbl th,.sheets-tbl td{padding:6px 10px}
+/* 上年底稿：选中的工作表识别结果 */
+.sheets-pick{display:flex; align-items:center; gap:10px; flex-wrap:wrap; font-size:12.5px}
+.sheets-pick .k{color:var(--ink-3); font-size:12px}
+.sheets-pick .v{color:var(--ink); margin-right:14px}
+.sheets-pick .v .tag-on,.sheets-pick .v .tag-off{font-size:11px}
+.tag-on{display:inline-block; padding:1px 8px; border-radius:10px; background:#eaf6ef; color:var(--ok); font-size:11px}
+.tag-off{display:inline-block; padding:1px 8px; border-radius:10px; background:#f0f2f5; color:var(--ink-3); font-size:11px}
+
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:14px}
+.tile{background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px 14px}
+.tile.ok{background:#f4faf6; border-color:#c9e7d5}
+.tile.warn{background:var(--new-bg); border-color:#f0dfc0}
+.tile.danger{background:var(--miss-bg); border-color:#f2cdd1}
+.tile .k{font-size:12px; color:var(--ink-3)}
+.tile .v{font-size:22px; font-weight:700; color:var(--navy)}
+.tile .s{font-size:11px; color:var(--ink-3); margin-top:2px}
+
+.tabs{display:flex; gap:6px; margin-top:14px; border-bottom:1px solid var(--line)}
+.tab{border:1px solid transparent; background:none; padding:8px 16px; font-size:13px; cursor:pointer; color:var(--ink-2); border-radius:8px 8px 0 0}
+.tab.active{background:#fff; border-color:var(--line); border-bottom-color:#fff; color:var(--navy-2); font-weight:600; margin-bottom:-1px}
+
+.row-new td{background:var(--new-bg)}
+.row-miss td{background:var(--miss-bg)}
+.alert{padding:10px 14px; border-radius:8px; font-size:13px; margin:8px 0}
+.alert.ok{background:#eaf6ef; color:var(--ok)}
+.alert.danger{background:#fdf3f4; color:var(--danger)}
+.alert.warn{background:var(--new-bg); color:var(--warn)}
+.tbl-note{font-size:11.5px; color:var(--ink-3); margin-top:8px}
+.subhd{font-size:13px; font-weight:600; color:var(--navy-2); margin:14px 0 6px}
+
+.toast-wrap{position:fixed; top:18px; right:18px; z-index:999; display:flex; flex-direction:column; gap:8px}
+.toast{background:#1c2733; color:#fff; padding:10px 16px; border-radius:8px; font-size:13px; opacity:0; transform:translateY(-6px); transition:.2s; max-width:360px}
+.toast.on{opacity:1; transform:translateY(0)}
+.toast.err{background:var(--danger)}
+
+/* WP初稿生成：工具能力 / AI 能力 分区标题 */
+.wp-sect{font-size:13px; font-weight:700; color:var(--navy); letter-spacing:.3px;
+  margin:20px 0 10px; padding-left:10px; border-left:3px solid var(--accent); line-height:1.45}
+.wp-sect .sub{display:block; font-weight:400; font-size:12px; color:var(--ink-3); margin-top:3px}
+
+/* ============ WP 四步流程（V1.2.11 重构） ============ */
+.flow{display:flex; gap:8px; align-items:center; margin-bottom:14px; flex-wrap:wrap}
+.fl{
+  flex:1; min-width:132px; display:flex; align-items:center; gap:9px;
+  padding:9px 13px; border:1px solid var(--line); border-radius:9px;
+  background:#fff; font-size:12.5px; color:var(--ink-3); transition:.15s;
+}
+.fl i{
+  width:20px; height:20px; border-radius:50%; background:#eef2f7; color:var(--ink-3);
+  font-style:normal; font-size:11.5px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.fl.done{border-color:#c9e7d5; background:#f4faf6; color:var(--ok)}
+.fl.done i{background:var(--ok); color:#fff}
+.fl.active{border-color:#cfe0f3; background:var(--accent-soft); color:var(--navy-2); font-weight:600}
+.fl.active i{background:var(--navy-2); color:#fff}
+
+/* 卡内子块：模板 / 上年资料 / 折算率 */
+.subblock{margin-top:18px; padding-top:16px; border-top:1px dashed var(--line)}
+.card-hd + .subblock{margin-top:0; padding-top:0; border-top:0}
+.subhd{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  font-size:13px; font-weight:600; color:var(--navy-2); margin-bottom:10px;
+}
+
+/* 生成前置检查 */
+.preflight{background:#fbfcfe; border:1px solid var(--line-2); border-radius:8px; padding:11px 14px; font-size:12.5px}
+.preflight .pf{display:flex; align-items:center; gap:8px; padding:2px 0}
+.preflight .pf .ic{width:14px; text-align:center; flex:0 0 auto}
+.preflight .ok{color:var(--ok)}
+.preflight .no{color:var(--danger)}
+.preflight .opt{color:var(--ink-3)}
+
+.btn.sm{padding:5px 11px; font-size:12.5px}
+.btn.ghost-dark{background:#fff; border-color:var(--line); color:var(--ink-2)}
+.btn.ghost-dark:hover{background:#f8fbfe}
+
+/* 生成结果里的下载按钮 */
+.filebtn{
+  display:inline-flex; align-items:center; gap:9px; padding:9px 16px; border-radius:9px;
+  border:1px solid #c9e7d5; background:#f4faf6; color:var(--ok);
+  font-size:13px; font-weight:600; cursor:pointer; transition:.15s;
+}
+.filebtn:hover{background:#eaf6ef; border-color:#a9d9bb}
+.filebtn .sz{font-weight:400; color:var(--ink-3); font-size:11.5px}
+.filebtn.alt{border-color:#cfe0f3; background:var(--accent-soft); color:var(--navy-2)}
+.filebtn.alt:hover{background:#dcebfa}
+
+/* 关键信息两栏：左＝基础信息，右＝CRA 认定风险。窄屏自动叠回单列 */
+.cols2{display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:0 22px}
+.cols2 > .col{min-width:0}
+.cols2 > .col + .col{border-left:1px solid var(--line); padding-left:22px}
+@media (max-width:1080px){
+  .cols2{grid-template-columns:1fr; gap:18px 0}
+  .cols2 > .col + .col{border-left:0; padding-left:0; border-top:1px solid var(--line); padding-top:14px}
+}
+/* 上年度费用底稿：VC / VD 两个下拉 */
+.pripsel{display:grid; grid-template-columns:1fr; gap:10px; margin-top:10px}
+.pripsel label{display:flex; flex-direction:column; gap:5px; font-size:12.5px; color:var(--ink-2)}
+.pripsel select{width:100%}
+.pripsel .meta{font-size:11.5px; color:var(--ink-3)}
