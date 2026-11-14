@@ -1704,7 +1704,7 @@
               '<div class="scroll"><table><thead><tr><th>工作表</th><th>行数</th><th>列数</th>' +
               '<th>表头匹配分</th><th>推测表头行</th></tr></thead><tbody>' + tb + '</tbody></table></div>' +
               '<div class="hint mt">把下面整段复制给 AI，让它回一份 <code>{sheet, header_row}</code>，' +
-              '再带回平台解析。规则见 <code>03_文档/03_底稿_费用.md</code>。</div>' +
+              '再带回平台解析。规则见 <code>03_文档/skills/底稿/10_费用.md</code>。</div>' +
               '<textarea id="probeMd" readonly style="width:100%;height:260px;margin-top:6px;' +
               'font-family:Consolas,Menlo,monospace;font-size:12px;line-height:1.5">' +
               esc(d.markdown || '') + '</textarea>' +

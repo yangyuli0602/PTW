@@ -1,10 +1,10 @@
 {
-  "version": "1.3.4",
+  "version": "1.3.5",
   "date": "2026-11-14",
   "notes": "（在此写本次更新说明，会显示在用户的更新提示里）",
   "urls": [
-    "https://github.com/<owner>/<repo>/releases/download/v1.3.4/PTW_v1.3.4_win64.zip"
+    "https://github.com/<owner>/<repo>/releases/download/v1.3.5/PTW_v1.3.5_win64.zip"
   ],
-  "sha256": "81baf226fdeda8f0b7987c5f839f49ab12bbb8072f033195adbf72a681e27b09",
-  "size": 36462151
+  "sha256": "00d26546e574c965cd8e6aec89de7d564d2e10c6b65df8e4b55d142bff398e1a",
+  "size": 36461695
 }

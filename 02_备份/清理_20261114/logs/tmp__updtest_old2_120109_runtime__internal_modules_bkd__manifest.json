@@ -1,0 +1,14 @@
+{
+  "key": "bkd",
+  "label": "三、WP初稿生成",
+  "order": 30,
+  "type": "embed",
+  "entry": "bkd.html",
+  "static": "web",
+  "icon": "◆",
+  "children": [
+    { "k": "wp_cash", "no": "1", "label": "货币资金" },
+    { "k": "wp_exp", "no": "2", "label": "销管费用" },
+    { "k": "wp_fa", "no": "3", "label": "固定资产" }
+  ]
+}

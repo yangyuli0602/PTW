@@ -18,10 +18,11 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJ = os.path.abspath(os.path.join(ROOT, ".."))   # 平台根：data / tmp 在这层
 sys.path.insert(0, os.path.join(ROOT, "程序"))
 
-TEMPLATE = os.path.join(ROOT, "data", "bkd_tpl", "K1 SWP 固定资产 202YMMDD XYZ公司.xlsx")
-LATEST = os.path.join(ROOT, "tmp", "_v1280", "bkd_out", "固定资产SWP_最新.xlsx")
+TEMPLATE = os.path.join(PROJ, "data", "bkd_tpl", "K1 SWP 固定资产 202YMMDD XYZ公司.xlsx")
+LATEST = os.path.join(PROJ, "tmp", "_v1280", "bkd_out", "固定资产SWP_最新.xlsx")
 
 fails = []
 

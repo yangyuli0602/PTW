@@ -28,7 +28,10 @@ while not os.path.isdir(os.path.join(ROOT, "程序")):
     ROOT = parent
 sys.path.insert(0, os.path.join(ROOT, "程序"))
 
-WORK = tempfile.mkdtemp(prefix="ptw_zip_", dir=os.path.join(ROOT, "tmp"))
+PROJ = os.path.abspath(os.path.join(ROOT, ".."))            # 平台根
+_TMP = os.path.join(PROJ, "tmp")
+os.makedirs(_TMP, exist_ok=True)
+WORK = tempfile.mkdtemp(prefix="ptw_zip_", dir=_TMP)
 os.environ["KZ_DATA_DIR"] = WORK
 
 from core.db import Ledger  # noqa: E402

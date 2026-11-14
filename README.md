@@ -49,6 +49,25 @@
 > **一条铁律**：`runtime/` 里的东西永远从 `开发/程序/` + `build.py` 生成，绝不手改。
 > 手改了下次打包就丢，而且会"本地能跑、别人不能跑"。
 
+### 结构由机器守，不靠记性
+
+乱不是"不小心"，是**没有任何东西拦着**。现在有三道闸：
+
+| 闸 | 位置 | 拦什么 |
+|---|---|---|
+| 构建前 | `build.py` 自动跑 `check_workspace.py` | 根目录出现野目录/野文件、`runtime` 不完整、tmp 膨胀、归档超 3 个包 → **拒绝构建** |
+| 提交前 | `.githooks/pre-commit` | 上面这些 + 新增文件位置、规则文件行数、引用工作区外路径 → **拒绝提交** |
+| 构建后 | `build.py` 自动清理 | `runtime_old_build` / `tmp/_dist_new` 当场删掉，构建完根目录回到只有固定项 |
+
+**平台根允许存在的东西（就这些）**：
+
+```
+PTW.exe  version.json  README.md  启动说明.txt  .gitignore
+runtime/  data/  开发/  02_备份/  04_归档/  tmp/
+```
+
+多一个就是脏的。手工整理入口：`开发/构建/3_整理工作区.bat`（先演练再执行）。
+
 ---
 
 ## 二、构建与发布
@@ -79,6 +98,7 @@ cd 开发\构建
 ```
 # 1. 把 token 粘进这个文件（只放一行，别加引号，绝不提交）
 #    C:\Users\<你>\.workbuddy\ptw_token.txt
+#    只认这一个文件：不会借用 MDMQ 等其它项目的 token（已在代码里禁止回退）
 
 # 2. 建仓库 + 写 UPDATE_REPO + 推 main
 ..\..\tmp\buildenv\Scripts\python.exe publish.py --setup
@@ -86,6 +106,14 @@ cd 开发\构建
 # 3. 发第一版
 ..\..\tmp\buildenv\Scripts\python.exe publish.py --notes "首个版本"
 ```
+
+**token 建议用 fine-grained、最小权限**（不是 classic 全权 token）：
+
+| 项 | 值 |
+|---|---|
+| Repository access | Only select repositories → `yangyuli0602/PTW` |
+| Permissions | Contents: Read and write；Administration: Read；Metadata: Read |
+| 有效期 | 90 天 |
 
 **以后每次发版**：改 `app_version.py` 的 `APP_VERSION` → 跑
 

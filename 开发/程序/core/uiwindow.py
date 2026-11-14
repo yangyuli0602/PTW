@@ -45,6 +45,16 @@ def profile_dir():
     return d
 
 
+def cache_dir():
+    """浏览器缓存单独放这里，方便整目录清理（不含登录态/窗口位置等配置）。"""
+    d = os.path.join(paths.DATA_DIR, "ui_cache")
+    try:
+        os.makedirs(d, exist_ok=True)
+    except OSError:
+        return None
+    return d
+
+
 def open_ui(url, log=None):
     """打开界面，返回 'app:<浏览器名>' 或 'browser'。任何异常都退回默认浏览器。"""
     def _say(msg):
@@ -59,9 +69,20 @@ def open_ui(url, log=None):
         for exe in _candidates():
             args = [exe, "--app=" + url, "--no-first-run",
                     "--no-default-browser-check", "--disable-session-crashed-bubble",
-                    "--window-size=1440,900"]
+                    "--window-size=1440,900",
+                    # —— 体积治理：浏览器默认会把组件、着色器、组件更新包缓存到配置目录，
+                    #    长期跑下来能占几百 MB（实测 498MB）。这里把两类都掐住：
+                    #    磁盘/媒体缓存限 50MB，且缓存单独放 data/ui_cache（可整目录删）
+                    "--disk-cache-size=52428800",
+                    "--media-cache-size=52428800",
+                    "--disable-component-update",          # 不下载 Edge 组件包（crx_cache 是最大头）
+                    "--disable-background-networking",
+                    "--disable-features=OptimizationHints,MediaRouter,Translate"]
             if prof:
                 args.insert(2, "--user-data-dir=" + prof)
+                cache = cache_dir()
+                if cache:
+                    args.append("--disk-cache-dir=" + cache)
             try:
                 subprocess.Popen(args, close_fds=True,
                                  creationflags=getattr(subprocess, "DETACHED_PROCESS", 0))

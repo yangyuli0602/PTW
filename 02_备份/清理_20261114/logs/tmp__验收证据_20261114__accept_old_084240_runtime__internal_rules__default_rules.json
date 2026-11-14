@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "j_summary",
+      "cat": "序时账 · 基础",
+      "name": "科目发生额汇总",
+      "desc": "按科目汇总借贷发生额与净额，用于快速看某类科目的规模。科目前缀留空=全部。",
+      "params": [
+        {"key": "acct", "label": "科目编码前缀", "type": "text", "default": ""},
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 200}
+      ],
+      "sql": "SELECT acct_code AS \"科目编码\", max(acct_name) AS \"科目名称\", count(*) AS \"分录数\", sum(debit) AS \"借方发生\", sum(credit) AS \"贷方发生\", sum(coalesce(debit,0)-coalesce(credit,0)) AS \"借贷净额\"\nFROM journal\nWHERE acct_code LIKE '{{acct}}%'\nGROUP BY 1\nORDER BY abs(sum(coalesce(debit,0)-coalesce(credit,0))) DESC\nLIMIT {{limit}}"
+    },
+    {
+      "id": "j_balance",
+      "cat": "序时账 · 基础",
+      "name": "凭证借贷平衡检查",
+      "desc": "按 期间+凭证类型+凭证号 聚合，列出借贷不等的凭证。容差 0.005 元以内视为平衡。",
+      "params": [
+        {"key": "tol", "label": "容差(元)", "type": "number", "default": 0.005}
+      ],
+      "sql": "SELECT coalesce(period,'') AS \"期间\", coalesce(vtype,'') AS \"凭证类型\", vno AS \"凭证号\", min(vdate) AS \"日期\", count(*) AS \"分录数\", sum(debit) AS \"借方合计\", sum(credit) AS \"贷方合计\", round(sum(coalesce(debit,0)-coalesce(credit,0)),2) AS \"差额\"\nFROM journal\nGROUP BY 1,2,3\nHAVING abs(sum(coalesce(debit,0)-coalesce(credit,0))) > {{tol}}\nORDER BY abs(sum(coalesce(debit,0)-coalesce(credit,0))) DESC"
+    },
+    {
+      "id": "j_month",
+      "cat": "序时账 · 基础",
+      "name": "月度发生额趋势",
+      "desc": "按期间统计分录数、借贷发生额，用来判断数据是否完整、各月是否异常。",
+      "params": [],
+      "sql": "SELECT coalesce(period, strftime(vdate,'%Y-%m')) AS \"期间\", count(*) AS \"分录数\", sum(debit) AS \"借方发生\", sum(credit) AS \"贷方发生\", round(sum(coalesce(debit,0)-coalesce(credit,0)),2) AS \"借贷差\"\nFROM journal\nGROUP BY 1\nORDER BY 1"
+    },
+    {
+      "id": "j_large",
+      "cat": "序时账 · 基础",
+      "name": "大额分录",
+      "desc": "筛出借方或贷方单笔达到阈值的分录。",
+      "params": [
+        {"key": "amt", "label": "金额阈值", "type": "number", "default": 1000000},
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 500}
+      ],
+      "sql": "SELECT vdate AS \"日期\", vno AS \"凭证号\", summary AS \"摘要\", acct_code AS \"科目编码\", acct_name AS \"科目名称\", debit AS \"借方\", credit AS \"贷方\", src AS \"来源\"\nFROM journal\nWHERE greatest(coalesce(debit,0), coalesce(credit,0)) >= {{amt}}\nORDER BY greatest(coalesce(debit,0), coalesce(credit,0)) DESC\nLIMIT {{limit}}"
+    },
+    {
+      "id": "j_detail",
+      "cat": "序时账 · 明细",
+      "name": "三栏式明细账",
+      "desc": "按科目输出逐笔发生额与累计余额（期初不在此表，累计余额为该科目自期初起滚动）。",
+      "params": [
+        {"key": "acct", "label": "科目编码前缀", "type": "text", "default": "1002"},
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 500}
+      ],
+      "sql": "SELECT acct_code AS \"科目编码\", vdate AS \"日期\", vno AS \"凭证号\", summary AS \"摘要\", debit AS \"借方\", credit AS \"贷方\", sum(coalesce(debit,0)-coalesce(credit,0)) OVER (PARTITION BY acct_code ORDER BY vdate, src_row ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS \"累计余额\"\nFROM journal\nWHERE acct_code LIKE '{{acct}}%'\nORDER BY acct_code, vdate, src_row\nLIMIT {{limit}}"
+    },
+    {
+      "id": "j_dup",
+      "cat": "序时账 · 异常",
+      "name": "疑似重复分录",
+      "desc": "同科目、同摘要、同金额出现多次，常见于重复入账或合并抵消。",
+      "params": [
+        {"key": "n", "label": "重复次数 >=", "type": "number", "default": 2}
+      ],
+      "sql": "SELECT acct_code AS \"科目编码\", acct_name AS \"科目名称\", summary AS \"摘要\", debit AS \"借方\", credit AS \"贷方\", count(*) AS \"次数\", min(vdate) AS \"首次\", max(vdate) AS \"末次\", string_agg(DISTINCT vno, '、') AS \"涉及凭证\"\nFROM journal\nGROUP BY 1,2,3,4,5\nHAVING count(*) >= {{n}}\nORDER BY count(*) DESC, abs(coalesce(sum(debit),0)+coalesce(sum(credit),0)) DESC"
+    },
+    {
+      "id": "j_empty",
+      "cat": "序时账 · 异常",
+      "name": "摘要为空或含关键词",
+      "desc": "找摘要缺失或含指定关键词（如 调整、冲销、结转、暂估）的分录。",
+      "params": [
+        {"key": "kw", "label": "关键词", "type": "text", "default": "调整"},
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 500}
+      ],
+      "sql": "SELECT vdate AS \"日期\", vno AS \"凭证号\", summary AS \"摘要\", acct_code AS \"科目编码\", acct_name AS \"科目名称\", debit AS \"借方\", credit AS \"贷方\", src AS \"来源\"\nFROM journal\nWHERE summary IS NULL OR trim(summary) IN ('','-','/') OR summary LIKE '%{{kw}}%'\nORDER BY vdate\nLIMIT {{limit}}"
+    },
+    {
+      "id": "j_search",
+      "cat": "序时账 · 明细",
+      "name": "摘要 / 科目 关键词检索",
+      "desc": "最常用的查账入口：摘要、科目名称、凭证号任意字段包含关键词。",
+      "params": [
+        {"key": "kw", "label": "关键词", "type": "text", "default": ""},
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 500}
+      ],
+      "sql": "SELECT vdate AS \"日期\", vno AS \"凭证号\", summary AS \"摘要\", acct_code AS \"科目编码\", acct_name AS \"科目名称\", debit AS \"借方\", credit AS \"贷方\", src AS \"来源\", src_row AS \"原始行号\"\nFROM journal\nWHERE summary LIKE '%{{kw}}%' OR acct_name LIKE '%{{kw}}%' OR acct_code LIKE '%{{kw}}%' OR vno LIKE '%{{kw}}%'\nORDER BY vdate\nLIMIT {{limit}}"
+    },
+    {
+      "id": "j_sample",
+      "cat": "序时账 · 明细",
+      "name": "凭证随机抽样",
+      "desc": "按凭证级随机抽取 N 个凭证（不是分录），用于凭证抽查底稿。",
+      "params": [
+        {"key": "n", "label": "抽样凭证数", "type": "number", "default": 30}
+      ],
+      "sql": "WITH v AS (\n  SELECT coalesce(period,'') AS period, coalesce(vtype,'') AS vtype, vno,\n         min(vdate) AS vdate, count(*) AS n_lines,\n         sum(coalesce(debit,0)) AS amt, any_value(summary) AS sample_summary\n  FROM journal GROUP BY 1,2,3\n)\nSELECT * FROM v USING SAMPLE {{n}} ROWS"
+    },
+    {
+      "id": "tb_trial",
+      "cat": "科目余额表 · 校验",
+      "name": "试算平衡总览",
+      "desc": "期初、本期发生、期末的借贷合计与差额。差额应为 0。",
+      "params": [],
+      "sql": "SELECT count(*) AS \"科目数\",\n  sum(coalesce(open_debit,0)) AS \"期初借方\", sum(coalesce(open_credit,0)) AS \"期初贷方\",\n  round(sum(coalesce(open_debit,0))-sum(coalesce(open_credit,0)),2) AS \"期初差\",\n  sum(coalesce(cur_debit,0)) AS \"本期借方\", sum(coalesce(cur_credit,0)) AS \"本期贷方\",\n  round(sum(coalesce(cur_debit,0))-sum(coalesce(cur_credit,0)),2) AS \"本期差\",\n  sum(coalesce(end_debit,0)) AS \"期末借方\", sum(coalesce(end_credit,0)) AS \"期末贷方\",\n  round(sum(coalesce(end_debit,0))-sum(coalesce(end_credit,0)),2) AS \"期末差\"\nFROM tb"
+    },
+    {
+      "id": "tb_check",
+      "cat": "科目余额表 · 校验",
+      "name": "期初＋发生＝期末 勾稽",
+      "desc": "逐科目核对：期初余额 + 本期借 − 本期贷 − 期末余额 应为 0。",
+      "params": [
+        {"key": "tol", "label": "容差(元)", "type": "number", "default": 0.01}
+      ],
+      "sql": "SELECT acct_code AS \"科目编码\", acct_name AS \"科目名称\", open_bal AS \"期初净额\", cur_debit AS \"本期借方\", cur_credit AS \"本期贷方\", end_bal AS \"期末净额\",\n  round(coalesce(open_bal,0)+coalesce(cur_debit,0)-coalesce(cur_credit,0)-coalesce(end_bal,0),2) AS \"差异\"\nFROM tb\nWHERE abs(coalesce(open_bal,0)+coalesce(cur_debit,0)-coalesce(cur_credit,0)-coalesce(end_bal,0)) > {{tol}}\nORDER BY abs(coalesce(open_bal,0)+coalesce(cur_debit,0)-coalesce(cur_credit,0)-coalesce(end_bal,0)) DESC"
+    },
+    {
+      "id": "tb_top",
+      "cat": "科目余额表 · 校验",
+      "name": "期末余额排名",
+      "desc": "按期末净额绝对值排序，快速定位重要科目。",
+      "params": [
+        {"key": "limit", "label": "返回行数", "type": "number", "default": 100}
+      ],
+      "sql": "SELECT acct_code AS \"科目编码\", acct_name AS \"科目名称\", open_bal AS \"期初净额\", cur_debit AS \"本期借方\", cur_credit AS \"本期贷方\", end_bal AS \"期末净额\"\nFROM tb\nORDER BY abs(coalesce(end_bal,0)) DESC\nLIMIT {{limit}}"
+    },
+    {
+      "id": "cross_cmp",
+      "cat": "交叉核对",
+      "name": "余额表 vs 序时账 发生额比对",
+      "desc": "按科目前 N 位汇总，比较科目余额表本期发生额与序时账借贷合计，找差异科目。",
+      "params": [
+        {"key": "len", "label": "科目取前几位", "type": "number", "default": 4},
+        {"key": "tol", "label": "容差(元)", "type": "number", "default": 0.01}
+      ],
+      "sql": "WITH a AS (\n  SELECT substr(acct_code,1,{{len}}) AS code, sum(coalesce(cur_debit,0)) AS d, sum(coalesce(cur_credit,0)) AS c\n  FROM tb GROUP BY 1\n), b AS (\n  SELECT substr(acct_code,1,{{len}}) AS code, sum(coalesce(debit,0)) AS d, sum(coalesce(credit,0)) AS c\n  FROM journal GROUP BY 1\n)\nSELECT coalesce(a.code,b.code) AS \"科目\", a.d AS \"余额表借方\", b.d AS \"序时账借方\", round(coalesce(a.d,0)-coalesce(b.d,0),2) AS \"借方差异\",\n       a.c AS \"余额表贷方\", b.c AS \"序时账贷方\", round(coalesce(a.c,0)-coalesce(b.c,0),2) AS \"贷方差异\"\nFROM a FULL JOIN b ON a.code = b.code\nWHERE abs(coalesce(a.d,0)-coalesce(b.d,0)) > {{tol}} OR abs(coalesce(a.c,0)-coalesce(b.c,0)) > {{tol}}\nORDER BY abs(coalesce(a.d,0)-coalesce(b.d,0)) + abs(coalesce(a.c,0)-coalesce(b.c,0)) DESC"
+    },
+    {
+      "id": "tb_fx",
+      "cat": "科目余额表 · 外币",
+      "name": "外币科目：原币 vs 本币",
+      "desc": "列出有外币金额的科目，并算出隐含汇率（本币 ÷ 原币），用于核对折算汇率是否异常。需要余额表映射了外币列（_fx）。",
+      "params": [],
+      "sql": "SELECT acct_code AS \"科目编码\", acct_name AS \"科目名称\", currency AS \"币种\",\n  end_bal_fx AS \"期末原币\", end_bal AS \"期末本币\",\n  round(coalesce(end_bal,0) / nullif(end_bal_fx,0), 4) AS \"期末隐含汇率\",\n  cur_debit_fx AS \"本期原币借方\", cur_debit AS \"本期本币借方\",\n  round(coalesce(cur_debit,0) / nullif(cur_debit_fx,0), 4) AS \"本期隐含汇率\",\n  cur_credit_fx AS \"本期原币贷方\", cur_credit AS \"本期本币贷方\"\nFROM tb\nWHERE coalesce(end_bal_fx,0) <> 0 OR coalesce(cur_debit_fx,0) <> 0 OR coalesce(cur_credit_fx,0) <> 0\nORDER BY abs(coalesce(end_bal,0)) DESC"
+    }
+  ]
+}

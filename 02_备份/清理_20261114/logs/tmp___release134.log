@@ -1,0 +1,28 @@
+  token 来源：C:\Users\李阳宇\.workbuddy\mdmq_token.txt
+发版 PTW v1.3.4（2026-11-14）  仓库 yangyuli0602/PTW
+
+1) 打包（launcher + 主程序 + zip）
+  [OK] zip PTW_v1.3.4_win64.zip（34.8 MB）
+1.5) 推送代码到 main
+  待推送文件 225 个
+    40/225
+    80/225
+    120/225
+    160/225
+    200/225
+  [OK] 已推送 main（commit a5acf9a1）
+2) 建 Release（已存在则复用）
+  [OK] 新建 Release id=444999306
+3) 上传安装包
+    10.0/34.8 MB  4040 KB/s
+    20.0/34.8 MB  3293 KB/s
+    30.0/34.8 MB  2262 KB/s
+  [OK] 资产 PTW_v1.3.4_win64.zip  id=746220457  36462151 字节
+4) 最后写 version.json（客户端据此判断版本）
+  [OK] 清单 → D:\桌面\FDE工作\01_PTW平台\04_归档\version.json
+  [OK] version.json 已更新（main 分支）
+5) 清缓存
+
+完成：https://github.com/yangyuli0602/PTW/releases/tag/v1.3.4
+包：D:\桌面\FDE工作\01_PTW平台\04_归档\PTW_v1.3.4_win64.zip（36462151 字节）
+用户端：打开 PTW → 检查更新 → 立即更新

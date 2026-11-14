@@ -1,0 +1,9 @@
+{
+  "key": "analysis",
+  "label": "二、查账与分析",
+  "order": 20,
+  "type": "native",
+  "children": [
+    { "k": "query", "no": "1", "label": "查账分析" }
+  ]
+}

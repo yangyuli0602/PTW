@@ -1,0 +1,92 @@
+2026-11-14 02:27:42.385: [INFO] CurrentProfilePath: D:\桌面\FDE工作\01_PTW平台\tmp\_noui\ui_profile\Default
+2026-11-14 02:27:42.385: [INFO] Profiles total count: 1
+2026-11-14 02:27:42.385: [INFO] Profile: name=用户配置 1 path=D:\桌面\FDE工作\01_PTW平台\tmp\_noui\ui_profile\Default lastActive=2026-11-14T02:27:42.377Z
+2026-11-14 02:27:42.385: [INFO] LastUsedProfileDir: D:\桌面\FDE工作\01_PTW平台\tmp\_noui\ui_profile\Default
+2026-11-14 02:27:42.385: [INFO] MostRecentlyActiveProfile: name=用户配置 1 path=D:\桌面\FDE工作\01_PTW平台\tmp\_noui\ui_profile\Default lastActive=2026-11-14T02:27:42.377Z
+2026-11-14 02:27:42.385: [INFO] OnDoneLoading sync enabled: 0
+2026-11-14 02:27:42.385: [INFO] BookmarkModelLoaded, ids_reassigned: 0
+2026-11-14 02:27:42.385: [INFO] BookmarksLoadDropped droppedNodes=0
+2026-11-14 02:27:42.385: [INFO] BookmarksSnapshot Startup total=2 bar=2 other=0 mobile=0 showBar=0 showBarNTP=1
+2026-11-14 02:27:42.413: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-11-14 02:27:44.445: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 0
+2026-11-14 02:27:44.446: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-14 02:27:44.447: [INFO] Primary account changed.
+2026-11-14 02:27:44.447: [INFO] OnPrimaryAccountChanged PrimaryAccountChangeEvent::Type::kSet
+2026-11-14 02:27:44.452: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-14 02:27:44.457: [INFO] RecordSyncInitDuration has_sync_been_enabled: 0 state: 3
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.279: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.280: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.281: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.281: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.281: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.281: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.281: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.282: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.283: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.284: [INFO] BookmarkNodeAdded, ABU: 0
+2026-11-14 02:27:49.288: [INFO] BookmarkBarPrefChanged showBar=0 showBarNTP=0
+2026-11-14 02:27:51.867: [INFO] Sync initialization duration: 7344ms

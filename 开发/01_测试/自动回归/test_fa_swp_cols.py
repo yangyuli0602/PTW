@@ -15,13 +15,14 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJ = os.path.abspath(os.path.join(ROOT, ".."))   # 平台根：data / tmp 在这层
 sys.path.insert(0, os.path.join(ROOT, "程序"))
 
 import openpyxl                                          # noqa: E402
 
 from modules.fa_swp import k01, xlcols                  # noqa: E402
 
-TPL = os.path.join(ROOT, "data", "bkd_tpl", "K1 SWP 固定资产 202YMMDD XYZ公司.xlsx")
+TPL = os.path.join(PROJ, "data", "bkd_tpl", "K1 SWP 固定资产 202YMMDD XYZ公司.xlsx")
 
 FAILS = []
 

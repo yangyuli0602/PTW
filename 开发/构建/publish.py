@@ -36,12 +36,8 @@ HERE = Path(__file__).parent
 PROJ = HERE.parent.parent                      # 01_PTW平台
 APP_SRC = PROJ / "开发" / "程序"
 ARCH = PROJ / "04_归档"
-TOKEN_CANDIDATES = [
-    Path.home() / ".workbuddy" / "ptw_token.txt",
-    Path.home() / ".workbuddy" / "github_token.txt",
-    # 同一台机器上已经配过的 MDMQ token 直接复用（同一个 GitHub 账号）
-    Path.home() / ".workbuddy" / "mdmq_token.txt",
-]
+#: PTW 专用 token（一行，别加引号）。与其它项目完全隔离，不共用。
+TOKEN_FILE = Path.home() / ".workbuddy" / "ptw_token.txt"
 API = "https://api.github.com"
 APP_NAME = "PTW"
 MANIFEST_REMOTE = "version.json"               # 客户端从 main 分支根目录读它
@@ -69,26 +65,31 @@ _CTX = _ctx()
 _OPENER = urllib.request.build_opener(urllib.request.HTTPSHandler(context=_CTX))
 
 
-# ------------------------------------------------------------------ 基础
+_TOKEN_CACHE = [None]
+
+
 def token():
-    """按顺序找 token 文件，取第一个有效的；绝不打印内容。"""
-    found = [p for p in TOKEN_CANDIDATES if p.exists()]
-    if not found:
-        die("找不到 token 文件。任选一个位置放：\n  " +
-            "\n  ".join(str(p) for p in TOKEN_CANDIDATES) +
-            "\n（只放一行，别加引号）\n生 token：GitHub → Settings → Developer settings → "
-            "Personal access tokens → Tokens (classic) → 勾 repo")
-    for p in found:
-        t = p.read_text(encoding="utf-8-sig", errors="replace").strip()
-        t = t.replace("\ufeff", "").strip().strip('"').strip("'")
-        if not t:
-            continue
-        if not (t.startswith("ghp_") or t.startswith("github_pat_")):
-            continue
-        print("  token 来源：%s" % p)
-        return t
-    die("找到了 token 文件但内容不可用（空 / 不以 ghp_ 或 github_pat_ 开头）：\n  " +
-        "\n  ".join(str(p) for p in found))
+    """读 PTW 专用 token，绝不打印内容。
+
+    只认这一个文件：~/.workbuddy/ptw_token.txt
+    绝不回退去用别的项目（MDMQ）的 token——单点失效、审计混淆、泄露半径都会被放大。
+    """
+    if _TOKEN_CACHE[0]:
+        return _TOKEN_CACHE[0]
+    p = TOKEN_FILE
+    if not p.exists():
+        die("找不到 PTW 专用 token 文件：\n  %s\n"
+            "放一行进去（别加引号）。生成方式见 README「发版」一节。\n"
+            "注意：不会去借用其它项目（如 MDMQ）的 token。" % p)
+    t = p.read_text(encoding="utf-8-sig", errors="replace").strip()
+    t = t.replace("\ufeff", "").strip().strip('"').strip("'")
+    if not t:
+        die("PTW token 文件是空的：%s" % p)
+    if not (t.startswith("ghp_") or t.startswith("github_pat_")):
+        die("PTW token 格式不对（应以 ghp_ 或 github_pat_ 开头）：%s" % p)
+    print("  token 来源：%s" % p)
+    _TOKEN_CACHE[0] = t
+    return t
 
 
 def api(path, method="GET", body=None, tok=None, allow_404=False, raw=False):
@@ -108,7 +109,6 @@ def api(path, method="GET", body=None, tok=None, allow_404=False, raw=False):
         try:
             with _OPENER.open(req, timeout=90) as r:
                 buf = r.read()
-            return buf if raw else json.loads(buf.decode("utf-8"))
         except urllib.error.HTTPError as e:
             # 409 = 空仓库（Git Repository is empty），语义上等同"还不存在"
             if allow_404 and e.code in (404, 409):
@@ -119,6 +119,8 @@ def api(path, method="GET", body=None, tok=None, allow_404=False, raw=False):
                 continue
             detail = e.read().decode("utf-8", "replace")[:400]
             die("%s %s → HTTP %s\n%s" % (method, path, e.code, detail))
+        except json.JSONDecodeError as e:
+            die("%s %s → 返回不是 JSON：%s" % (method, path, e))
         except Exception as e:                      # 连接被掐、SSL EOF、超时
             last = "%s: %s" % (type(e).__name__, str(e)[:80])
             if attempt < 3:
@@ -126,6 +128,15 @@ def api(path, method="GET", body=None, tok=None, allow_404=False, raw=False):
                 time.sleep(1.5 * (attempt + 1))
                 continue
             die("连不上 GitHub：%s\n代理不稳定时重跑一次即可（已建的 blob 会复用）。" % last)
+        # 204 之类没有响应体的成功（如 DELETE）——不能当 JSON 解
+        if not buf:
+            return None
+        if raw:
+            return buf
+        try:
+            return json.loads(buf.decode("utf-8"))
+        except json.JSONDecodeError:
+            die("%s %s → 返回不是 JSON：%s" % (method, path, buf[:120]))
 
 
 def app_version_module():
@@ -411,6 +422,105 @@ def purge_silent(repo):
             pass
 
 
+def assert_no_secret(zp, tok):
+    """发出去的包绝不能带 token——泄露等于任何人都能给客户推"新版本"。
+
+    这里做一次物理扫描：解压每个文本文件，找 token 明文。
+    """
+    bad = []
+    scanned = 0
+    skip = (".exe", ".dll", ".pyd", ".png", ".jpg", ".ico", ".xlsx", ".zip", ".7z", ".duckdb")
+    with zipfile.ZipFile(zp) as z:
+        for n in z.namelist():
+            if n.lower().endswith(skip):
+                continue
+            try:
+                data = z.read(n)
+            except Exception:
+                continue
+            scanned += 1
+            if tok.encode("utf-8") in data:
+                bad.append(n)
+    if bad:
+        die("分发包里出现了 token 明文，已中止发布：\n  " + "\n  ".join(bad) +
+            "\n请把这些文件从打包范围里去掉，再重新发布。")
+    ok("分发包不含 token（扫描 %d 个文件）" % scanned)
+
+
+def _vk(s):
+    import re as _re
+    nums = _re.findall(r"\d+", str(s))[:4]
+    return tuple(int(x) for x in nums) or (0,)
+
+
+def published_record():
+    p = ARCH / "已发布.json"
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def record_published(ver, doc):
+    rec = published_record()
+    rec[ver] = {"sha256": doc.get("sha256", ""), "size": doc.get("size"),
+                "tag": "v" + ver, "at": time.strftime("%Y-%m-%d %H:%M")}
+    (ARCH / "已发布.json").write_text(
+        json.dumps(rec, ensure_ascii=False, indent=2), encoding="utf-8")
+    ok("发布历史已记录（04_归档/已发布.json，共 %d 个版本）" % len(rec))
+
+
+def rollback(argv):
+    """把更新清单指回上一个（或指定）已发布版本。
+
+    老实说清能力边界：更新器只会「升」不会「降」。所以本命令的效果是
+    **阻止还没升级的人继续升级**；已经升上去的客户端只能重装旧包。
+    """
+    to = ""
+    notes = ""
+    for i, a in enumerate(argv):
+        if a == "--to" and i + 1 < len(argv):
+            to = argv[i + 1].lstrip("vV")
+        if a == "--notes" and i + 1 < len(argv):
+            notes = argv[i + 1]
+    repo = repo_name()
+    rec = published_record()
+    if not rec:
+        die("本地没有发布记录（04_归档/已发布.json），不知道有哪些已发版本。")
+    vers = sorted(rec, key=_vk)
+    cur = str(getattr(app_version_module(), "APP_VERSION", ""))
+    if to:
+        target = to
+    elif len(vers) >= 2:
+        target = vers[-2] if vers[-1] == cur else vers[-1]
+    else:
+        die("只发布过一个版本（%s），没有可回滚的目标。" % vers[-1])
+    if target not in rec:
+        die("没有 v%s 的发布记录。可选：%s" % (target, "、".join(vers)))
+
+    e = rec[target]
+    tok = token()
+    doc = {
+        "version": target,
+        "date": time.strftime("%Y-%m-%d"),
+        "notes": notes or ("回滚：更新清单撤回到 v%s" % target),
+        "urls": ["https://github.com/%s/releases/download/v%s/PTW_v%s_win64.zip"
+                 % (repo, target, target)],
+        "sha256": e.get("sha256", ""),
+        "size": e.get("size"),
+        "page_url": "https://github.com/%s/releases/latest" % repo,
+    }
+    print("把清单指回 v%s（sha %s…，%s 字节）"
+          % (target, (e.get("sha256") or "")[:12], e.get("size")))
+    put_file(repo, MANIFEST_REMOTE, doc, "rollback: manifest -> v%s" % target, tok)
+    print("\n完成。请注意：")
+    print("  · 还没升级的客户端：点检查更新会看到 v%s，不会再升到更高版本或（版本相同）不提示" % target)
+    print("  · 已经升级到更高版本的客户端：更新器只升不降，**不会自动回退**，只能重装旧包")
+    print("  · 想真正让所有人退回：修好问题、升一个新版本号重发（推荐做法）")
+
+
 def release(argv):
     notes = ""
     skip_build = "--skip-build" in argv
@@ -440,6 +550,14 @@ def release(argv):
     today = time.strftime("%Y-%m-%d")
     print("发版 %s %s（%s）  仓库 %s\n" % (APP_NAME, tag, today, repo))
 
+    # 已发布过的版本号不许再发：客户端版本相同就不会更新，发了等于没发，
+    # 还会让"同版本两份字节"，追溯断裂。
+    rec = published_record()
+    if ver in rec and "--force" not in argv:
+        die("v%s 已经发布过（%s）。\n"
+            "发版请先升 app_version.py 的 APP_VERSION；\n"
+            "确实要重发同一版本（例如上一版传错了）加 --force。" % (ver, rec[ver].get("at", "?")))
+
     if skip_build:
         zp = ARCH / ("PTW_v%s_win64.zip" % ver)
         if not zp.exists():
@@ -448,6 +566,9 @@ def release(argv):
     else:
         zp, ver = build_package()
         tag = "v" + ver
+
+    print("1.2) 安全检查：分发包内不得含 token")
+    assert_no_secret(zp, tok)
 
     print("1.5) 推送代码到 main")
     local_commit("release: %s" % tag)
@@ -476,6 +597,7 @@ def release(argv):
     print("4) 最后写 version.json（客户端据此判断版本）")
     doc = make_manifest(ver, zp, notes or ("%s %s" % (APP_NAME, tag)), repo, asset)
     put_file(repo, MANIFEST_REMOTE, doc, "release: %s" % tag, tok)
+    record_published(ver, doc)
 
     print("5) 清缓存")
     try:
@@ -506,6 +628,9 @@ def main():
         return
     if "--setup" in argv:
         setup(argv)
+        return
+    if argv and argv[0] in ("rollback", "--rollback"):
+        rollback(argv[1:])
         return
     release(argv)
 

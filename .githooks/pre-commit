@@ -1,5 +1,5 @@
 #!/bin/sh
-# 提交前结构体检（防止乱存文件 / 规则文件膨胀 / 引用工作区外路径）
+# 提交前结构体检（防止乱存文件 / 规则文件膨胀 / 引用工作区外路径 / 根目录堆垃圾）
 # 安装：git config core.hooksPath .githooks   ← 每个新克隆的仓库要执行一次
 # 豁免：git commit --no-verify（请在提交说明里写明原因）
 
@@ -12,15 +12,27 @@ for c in "$ROOT/tmp/buildenv/Scripts/python.exe" \
     if [ -f "$c" ]; then PY="$c"; break; fi
 done
 
-if [ -n "$PY" ]; then
-    exec "$PY" "$ROOT/.githooks/check_structure.py"
+if [ -z "$PY" ]; then
+    for c in python python3 py; do
+        if command -v "$c" >/dev/null 2>&1; then PY="$c"; break; fi
+    done
 fi
 
-for c in python python3 py; do
-    if command -v "$c" >/dev/null 2>&1; then
-        exec "$c" "$ROOT/.githooks/check_structure.py"
-    fi
-done
+if [ -z "$PY" ]; then
+    echo "[结构体检] 找不到可用的 Python，跳过检查（请保留 tmp/buildenv 或安装 Python）"
+    exit 0
+fi
 
-echo "[结构体检] 找不到可用的 Python，跳过检查（请保留 tmp/buildenv 或安装 Python）"
+# 1) 提交内容合规（新增文件位置、规则文件行数、越界路径）
+"$PY" "$ROOT/.githooks/check_structure.py" || exit 1
+
+# 2) 工作区本身的结构（根目录只许固定项、runtime 完整、tmp/归档不膨胀）
+if [ -f "$ROOT/开发/构建/check_workspace.py" ]; then
+    echo
+    "$PY" "$ROOT/开发/构建/check_workspace.py" --quiet || {
+        echo "  → 先跑 开发/构建/3_整理工作区.bat，或确认无所谓时 git commit --no-verify"
+        exit 1
+    }
+fi
+
 exit 0

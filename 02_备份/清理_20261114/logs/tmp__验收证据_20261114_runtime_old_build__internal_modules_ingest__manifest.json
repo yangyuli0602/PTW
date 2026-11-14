@@ -1,0 +1,20 @@
+{
+  "key": "ingest",
+  "label": "一、导入与清洗",
+  "order": 10,
+  "type": "native",
+  "children": [
+    { "k": "import", "no": "1", "label": "导入数据" },
+    { "k": "clean", "no": "2", "label": "清洗与映射",
+      "subs": [
+        { "k": "clean", "label": "数据清洗" },
+        { "k": "map", "label": "字段映射" }
+      ] },
+    { "k": "merge", "no": "3", "label": "合并与检查",
+      "subs": [
+        { "k": "merge", "label": "合并成表" },
+        { "k": "check", "label": "数据检查" }
+      ] },
+    { "k": "share", "no": "4", "label": "分享导出" }
+  ]
+}

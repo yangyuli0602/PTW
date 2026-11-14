@@ -1,0 +1,77 @@
+186 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.10
+187 INFO: Python: 3.12.6
+223 INFO: Platform: Windows-11-10.0.26200-SP0
+223 INFO: Python environment: D:\桌面\FDE工作\01_PTW平台\tmp\buildenv
+238 INFO: Removing temporary files and cleaning cache in C:\Users\李阳宇\AppData\Local\pyinstaller
+241 INFO: Module search paths (PYTHONPATH):
+['D:\\桌面\\FDE工作\\01_PTW平台\\开发\\构建',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\WorkBuddy\\resources\\app.asar.unpacked\\cli\\vendor\\shim',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\开发\\程序']
+730 INFO: Appending 'datas' from .spec
+735 INFO: checking Analysis
+735 INFO: Building Analysis because Analysis-00.toc is non existent
+735 INFO: Looking for Python shared library...
+735 INFO: Using Python shared library: C:\Users\李阳宇\AppData\Local\Programs\Python\Python312\python312.dll
+735 INFO: Running Analysis Analysis-00.toc
+735 INFO: Target bytecode optimization level: 0
+735 INFO: Initializing module dependency graph...
+737 INFO: Initializing module graph hook caches...
+748 INFO: Analyzing modules for base_library.zip ...
+2301 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+2352 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+3474 INFO: Processing standard module hook 'hook-math.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+3608 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+4544 INFO: Caching module dependency graph...
+4565 INFO: Analyzing D:\桌面\FDE工作\01_PTW平台\开发\程序\server.py
+4613 INFO: Processing standard module hook 'hook-webbrowser.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+4819 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+4844 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+4852 INFO: Processing standard module hook 'hook-duckdb.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+5717 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+5720 INFO: SetuptoolsInfo: initializing cached setuptools info...
+6582 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6656 INFO: Processing standard module hook 'hook-openpyxl.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+6908 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6926 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+7644 INFO: Processing standard module hook 'hook-certifi.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+7655 INFO: Processing module hooks (post-graph stage)...
+7911 INFO: Performing binary vs. data reclassification (59 entries)
+7932 INFO: Looking for ctypes DLLs
+7939 INFO: Analyzing run-time hooks ...
+7940 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+7946 INFO: Creating base_library.zip...
+7960 INFO: Looking for dynamic libraries
+8588 INFO: Extra DLL search directories (AddDllDirectory): []
+8588 INFO: Extra DLL search directories (PATH): []
+9098 INFO: Warnings written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\upd2\PTWApp\warn-PTWApp.txt
+9121 INFO: Graph cross-reference written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\upd2\PTWApp\xref-PTWApp.html
+9144 INFO: checking PYZ
+9144 INFO: Building PYZ because PYZ-00.toc is non existent
+9145 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\upd2\PTWApp\PYZ-00.pyz
+9352 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\upd2\PTWApp\PYZ-00.pyz completed successfully.
+9361 INFO: checking PKG
+9361 INFO: Building PKG because PKG-00.toc is non existent
+9361 INFO: Building PKG (CArchive) PTWApp.pkg
+9390 INFO: Building PKG (CArchive) PTWApp.pkg completed successfully.
+9392 INFO: Bootloader D:\桌面\FDE工作\01_PTW平台\tmp\buildenv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+9392 INFO: checking EXE
+9392 INFO: Building EXE because EXE-00.toc is non existent
+9392 INFO: Building EXE from EXE-00.toc
+9393 INFO: Copying bootloader EXE to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\upd2\PTWApp\PTWApp.exe
+9537 INFO: Copying icon to EXE
+9648 INFO: Copying 0 resources to EXE
+9648 INFO: Embedding manifest in EXE
+9767 INFO: Appending PKG archive to EXE
+9793 INFO: Fixing EXE headers
+10078 INFO: Building EXE from EXE-00.toc completed successfully.
+10080 INFO: checking COLLECT
+10080 INFO: Building COLLECT because COLLECT-00.toc is non existent
+10080 INFO: Building COLLECT COLLECT-00.toc
+10324 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+10325 INFO: Build complete! The results are available in: D:\桌面\FDE工作\01_PTW平台\tmp\_upd_pkg2

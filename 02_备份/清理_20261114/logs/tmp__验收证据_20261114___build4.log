@@ -1,0 +1,158 @@
+D:\桌面\FDE工作\01_PTW平台\开发\构建\build.py:2: SyntaxWarning: invalid escape sequence '\.'
+  """一键构建：打包 launcher + 主程序 + 出发布包 + 生成 version.json 片段。
+192 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.10
+192 INFO: Python: 3.12.6
+226 INFO: Platform: Windows-11-10.0.26200-SP0
+226 INFO: Python environment: D:\桌面\FDE工作\01_PTW平台\tmp\buildenv
+240 INFO: Removing temporary files and cleaning cache in C:\Users\李阳宇\AppData\Local\pyinstaller
+2330 INFO: Module search paths (PYTHONPATH):
+['D:\\桌面\\FDE工作\\01_PTW平台\\开发\\构建',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\WorkBuddy\\resources\\app.asar.unpacked\\cli\\vendor\\shim',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\开发\\构建']
+2816 INFO: checking Analysis
+2816 INFO: Building Analysis because Analysis-00.toc is non existent
+2816 INFO: Looking for Python shared library...
+2816 INFO: Using Python shared library: C:\Users\李阳宇\AppData\Local\Programs\Python\Python312\python312.dll
+2816 INFO: Running Analysis Analysis-00.toc
+2816 INFO: Target bytecode optimization level: 0
+2816 INFO: Initializing module dependency graph...
+2818 INFO: Initializing module graph hook caches...
+2829 INFO: Analyzing modules for base_library.zip ...
+4560 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+5111 INFO: Processing standard module hook 'hook-math.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+5741 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6271 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6544 INFO: Caching module dependency graph...
+6565 INFO: Analyzing D:\桌面\FDE工作\01_PTW平台\开发\构建\launcher.py
+6585 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+6589 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+6950 INFO: Processing standard module hook 'hook-_tkinter.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6970 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6974 INFO: Processing module hooks (post-graph stage)...
+6975 INFO: Processing standard module hook 'hook-_tkinter.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6981 INFO: Performing binary vs. data reclassification (924 entries)
+7420 INFO: Looking for ctypes DLLs
+7423 INFO: Analyzing run-time hooks ...
+7424 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+7426 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+7440 INFO: Creating base_library.zip...
+7454 INFO: Looking for dynamic libraries
+7706 INFO: Extra DLL search directories (AddDllDirectory): []
+7706 INFO: Extra DLL search directories (PATH): []
+8214 INFO: Warnings written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\launcher\launcher\warn-launcher.txt
+8224 INFO: Graph cross-reference written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\launcher\launcher\xref-launcher.html
+8251 INFO: checking PYZ
+8251 INFO: Building PYZ because PYZ-00.toc is non existent
+8251 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\launcher\launcher\PYZ-00.pyz
+8347 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\launcher\launcher\PYZ-00.pyz completed successfully.
+8360 INFO: checking PKG
+8360 INFO: Building PKG because PKG-00.toc is non existent
+8360 INFO: Building PKG (CArchive) PTW.pkg
+10973 INFO: Building PKG (CArchive) PTW.pkg completed successfully.
+10984 INFO: Bootloader D:\桌面\FDE工作\01_PTW平台\tmp\buildenv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+10984 INFO: checking EXE
+10984 INFO: Building EXE because EXE-00.toc is non existent
+10984 INFO: Building EXE from EXE-00.toc
+11183 INFO: Copying bootloader EXE to D:\桌面\FDE工作\01_PTW平台\PTW.exe
+11253 INFO: Copying icon to EXE
+11370 INFO: Copying 0 resources to EXE
+11370 INFO: Embedding manifest in EXE
+11471 INFO: Appending PKG archive to EXE
+11502 INFO: Fixing EXE headers
+11643 INFO: Building EXE from EXE-00.toc completed successfully.
+11656 INFO: Build complete! The results are available in: D:\桌面\FDE工作\01_PTW平台
+191 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.10
+191 INFO: Python: 3.12.6
+223 INFO: Platform: Windows-11-10.0.26200-SP0
+223 INFO: Python environment: D:\桌面\FDE工作\01_PTW平台\tmp\buildenv
+237 INFO: Removing temporary files and cleaning cache in C:\Users\李阳宇\AppData\Local\pyinstaller
+2522 INFO: Module search paths (PYTHONPATH):
+['D:\\桌面\\FDE工作\\01_PTW平台\\开发\\构建',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\WorkBuddy\\resources\\app.asar.unpacked\\cli\\vendor\\shim',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\python312.zip',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\DLLs',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312\\Lib',
+ 'C:\\Users\\李阳宇\\AppData\\Local\\Programs\\Python\\Python312',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages',
+ 'D:\\桌面\\FDE工作\\01_PTW平台\\开发\\程序']
+3028 INFO: Appending 'datas' from .spec
+3033 INFO: checking Analysis
+3033 INFO: Building Analysis because Analysis-00.toc is non existent
+3033 INFO: Looking for Python shared library...
+3033 INFO: Using Python shared library: C:\Users\李阳宇\AppData\Local\Programs\Python\Python312\python312.dll
+3033 INFO: Running Analysis Analysis-00.toc
+3033 INFO: Target bytecode optimization level: 0
+3034 INFO: Initializing module dependency graph...
+3036 INFO: Initializing module graph hook caches...
+3047 INFO: Analyzing modules for base_library.zip ...
+4692 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+5234 INFO: Processing standard module hook 'hook-math.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+5902 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6501 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+6778 INFO: Caching module dependency graph...
+6800 INFO: Analyzing D:\桌面\FDE工作\01_PTW平台\开发\程序\server.py
+6855 INFO: Processing standard module hook 'hook-webbrowser.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+7093 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+7119 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+7127 INFO: Processing standard module hook 'hook-duckdb.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+7984 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+7986 INFO: SetuptoolsInfo: initializing cached setuptools info...
+8813 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+8881 INFO: Processing standard module hook 'hook-openpyxl.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9117 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+9134 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks'
+9874 INFO: Processing standard module hook 'hook-certifi.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+9885 INFO: Processing module hooks (post-graph stage)...
+10147 INFO: Performing binary vs. data reclassification (59 entries)
+10181 INFO: Looking for ctypes DLLs
+10190 INFO: Analyzing run-time hooks ...
+10191 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\桌面\\FDE工作\\01_PTW平台\\tmp\\buildenv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+10197 INFO: Creating base_library.zip...
+10212 INFO: Looking for dynamic libraries
+10885 INFO: Extra DLL search directories (AddDllDirectory): []
+10886 INFO: Extra DLL search directories (PATH): []
+11681 INFO: Warnings written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\app\PTWApp\warn-PTWApp.txt
+11706 INFO: Graph cross-reference written to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\app\PTWApp\xref-PTWApp.html
+11730 INFO: checking PYZ
+11731 INFO: Building PYZ because PYZ-00.toc is non existent
+11731 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\app\PTWApp\PYZ-00.pyz
+11951 INFO: Building PYZ (ZlibArchive) D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\app\PTWApp\PYZ-00.pyz completed successfully.
+11959 INFO: checking PKG
+11959 INFO: Building PKG because PKG-00.toc is non existent
+11959 INFO: Building PKG (CArchive) PTWApp.pkg
+11986 INFO: Building PKG (CArchive) PTWApp.pkg completed successfully.
+11987 INFO: Bootloader D:\桌面\FDE工作\01_PTW平台\tmp\buildenv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+11987 INFO: checking EXE
+11987 INFO: Building EXE because EXE-00.toc is non existent
+11987 INFO: Building EXE from EXE-00.toc
+11987 INFO: Copying bootloader EXE to D:\桌面\FDE工作\01_PTW平台\tmp\pyi-build\app\PTWApp\PTWApp.exe
+12138 INFO: Copying icon to EXE
+12268 INFO: Copying 0 resources to EXE
+12268 INFO: Embedding manifest in EXE
+12373 INFO: Appending PKG archive to EXE
+12401 INFO: Fixing EXE headers
+12678 INFO: Building EXE from EXE-00.toc completed successfully.
+12680 INFO: checking COLLECT
+12680 INFO: Building COLLECT because COLLECT-00.toc is non existent
+12681 INFO: Building COLLECT COLLECT-00.toc
+12943 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+12945 INFO: Build complete! The results are available in: D:\桌面\FDE工作\01_PTW平台\tmp\_dist_new
+============================================================
+构建 PTW v1.3.0  根目录=D:\桌面\FDE工作\01_PTW平台
+============================================================
+» python.exe -m PyInstaller --noconfirm --clean --distpath 01_PTW平台 --workpath launcher launcher.spec
+   launcher → D:\桌面\FDE工作\01_PTW平台\PTW.exe
+» python.exe -m PyInstaller --noconfirm --clean --distpath _dist_new --workpath app PTWApp.spec
+   旧 runtime → runtime_old_build
+   主程序 → D:\桌面\FDE工作\01_PTW平台\runtime
+   发布包 → D:\桌面\FDE工作\01_PTW平台\04_归档\PTW_v1.3.0_win64.zip（81 文件 / 34.8 MB）
+   version.json → D:\桌面\FDE工作\01_PTW平台\04_归档\version.json
+
+完成。发版顺序：① 打包 → ② 建 Release 传 zip → ③ 最后改仓库 version.json

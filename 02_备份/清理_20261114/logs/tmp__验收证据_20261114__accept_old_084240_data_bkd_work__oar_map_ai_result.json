@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "company": "甲公司",
+      "name": "工资薪酬_基本工资",
+      "bucket": "工资薪酬",
+      "reason": "mock 判定",
+      "confidence": 0.9,
+      "source": "内置AI"
+    },
+    {
+      "company": "甲公司",
+      "name": "销售费用_宣传推广费",
+      "bucket": "其他",
+      "reason": "mock 判定",
+      "confidence": 0.9,
+      "source": "内置AI"
+    }
+  ],
+  "generated_at": "2026-11-14 00:46:45",
+  "engine": "builtin"
+}

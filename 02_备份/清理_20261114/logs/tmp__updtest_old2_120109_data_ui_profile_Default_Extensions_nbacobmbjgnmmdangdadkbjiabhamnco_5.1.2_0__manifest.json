@@ -1,0 +1,26 @@
+{
+   "background": {
+      "scripts": [ "loader.js" ]
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "js": [ "contentLoader.js" ],
+      "matches": [ "http://*/*", "https://*/*", "file://*/*" ],
+      "run_at": "document_start"
+   } ],
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+   "description": "Send a message to a native application for Laiye to automate the page.",
+   "devtools_page": "devtools.html",
+   "icons": {
+      "128": "icon_128x128.png",
+      "16": "icon_16x16.png",
+      "32": "icon_32x32.png",
+      "64": "icon_64x64.png"
+   },
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm0p51CIHyxZluqbArnASQDh74Xwda3B7G9svfOW6GDt5UNEo9oMfCVe5pI6MZly9cInZfAbuuzearmR5sWGESZf2d+R6s0VDVFoPMfykk8he3id7y5fE+z5vTrhR7ubZ7DVLKi14tuNLHMx4V7pI5SSMng3rji0jA5NY80d4RLS8XZHy9PRFdgDAiHyxeURGP/SCszok3W3NqY2sC3Mat8ma506UgAgh2dScSlLb667150ilTkecZy+8BUBuB4DoUMdBYiSDt4uPDJQZK0c2Styw/RKGNtW4/d9gql6cX2VhemAfMFBZBxbknW1T3NsAatj425zFUTtu5ub+pPW9CwIDAQAB",
+   "manifest_version": 2,
+   "name": "Laiye Native Message Plugin",
+   "permissions": [ "nativeMessaging", "tabs", "webNavigation", "webRequest", "\u003Call_urls>" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "5.1.2"
+}
